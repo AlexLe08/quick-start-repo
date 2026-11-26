@@ -13,7 +13,7 @@
 #    {{YEAR}}, and the per-language names derived from the project name
 #    ({{PACKAGE_NAME}} for Python and Java packages, {{PASCAL_NAME}} for
 #    C# namespaces), in file contents and in paths (__PACKAGE_NAME__,
-#    __PASCAL_NAME__);
+#    __PASCAL_NAME__), and this year in LICENSE;
 # 5. deletes what only the template needs: languages/, the template's own
 #    README and CI workflow, and this script.
 #
@@ -26,7 +26,8 @@
 # Usage: scripts/init-project.sh <typescript|python|java|csharp>
 #          [--name <project-name>] [--description "<one paragraph>"]
 #   --name defaults to the repository folder's name; lowercase letters,
-#   digits and hyphens, starting with a letter.
+#   digits and hyphens, starting with a letter. --description is one line
+#   without " \ < > or &.
 set -euo pipefail
 
 usage() {
@@ -75,6 +76,12 @@ if ! [[ "$name" =~ ^[a-z][a-z0-9-]*$ ]]; then
   exit 2
 fi
 description="${description:-TODO: one paragraph on what this project is and who it is for.}"
+# It lands in package.json, pyproject.toml and pom.xml unescaped.
+case "$description" in
+  *[\"\\\<\>\&]* | *$'\n'*)
+    echo 'the description is one line without " \ < > or &' >&2
+    exit 2 ;;
+esac
 year="$(date +%Y)"
 # my-app -> my_app (Python and Java packages), MyApp (C# namespaces).
 package_name="${name//-/_}"
@@ -116,6 +123,8 @@ grep -rlI --exclude-dir=.git --exclude-dir=languages -e '{{[A-Z_]*}}' . |
   while IFS= read -r file; do
     perl -pi -e 's/\{\{(PROJECT_NAME|PROJECT_DESCRIPTION|YEAR|PACKAGE_NAME|PASCAL_NAME)\}\}/$ENV{$1}/g' "$file"
   done
+# The license keeps a real year in the template, so GitHub recognises it.
+perl -pi -e 's/^(Copyright \(c\) )\d{4}/$1$ENV{YEAR}/' LICENSE
 
 # 5. What only the template needs.
 next_steps="$(cat "$lang_dir/next-steps.txt")"
