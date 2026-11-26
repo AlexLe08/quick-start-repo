@@ -45,7 +45,7 @@ Every project gets:
 | --- | --- |
 | `AGENTS.md` | Instructions for any AI agent: workflow, docs, hard rules. The language's commands are added to it. |
 | `CLAUDE.md` | Imports `AGENTS.md`, plus what is specific to Claude Code |
-| `.claude/settings.json` | Shared Claude Code permissions: no force pushes, no pushes to `main`, no merging or reviewing PRs, no reading `.env` |
+| `.claude/settings.json` | Shared Claude Code permissions: no force pushes, no pushes to `main`, no skipping the pre-commit hook, no merging or reviewing PRs, no reading `.env` |
 | `.claude/agents/reviewer.md` | A read-only subagent that reviews a branch before its PR |
 | `.github/pull_request_template.md` | What changed, screenshots, checklist, what wasn't verified |
 | `.github/ISSUE_TEMPLATE/` | Issue forms for bug reports and feature requests, which label the issue `bug` or `enhancement` |
@@ -56,6 +56,7 @@ Every project gets:
 | `docs/roadmap.md` | Now, Next up, Later, Done |
 | `docs/github-setup.md` | The settings to apply by hand |
 | `docs/releasing.md` | Versions, changelog, tags, and publishing to npm, for a project that releases |
+| `.githooks/pre-commit` | Checks the staged files before each commit: the language's formatter and linter (`scripts/check-staged.sh`), and typos and gitleaks when they're installed. `scripts/setup-worktree.sh` turns it on |
 | `scripts/new-worktree.sh` | Starts a task: a branch and worktree from the latest `origin/main` |
 | `scripts/cleanup-merged.sh` | After a merge, removes that task's worktree and branch |
 | `.gitignore`, `.gitattributes`, `.editorconfig` | OS, editor and secret files ignored; LF line endings; indent per file type |
@@ -65,7 +66,8 @@ Every project gets:
 Each language in [`languages/`](languages/) adds its own config, CI and
 CodeQL workflows, Dependabot file (monthly, grouped, a week's cooldown),
 editor settings, starter code and test, `scripts/check.sh` (everything CI
-runs, one line per step) and `scripts/setup-worktree.sh`:
+runs, one line per step), `scripts/check-staged.sh` (the pre-commit
+hook's quick checks) and `scripts/setup-worktree.sh`:
 
 | Language | Toolchain |
 | --- | --- |

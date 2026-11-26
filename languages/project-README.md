@@ -9,6 +9,9 @@
 Each change is a small PR to `main`, squash-merged, with a
 [Conventional Commits](https://www.conventionalcommits.org/) title
 (`feat: …`, `fix: …`). `scripts/check.sh` runs everything CI runs.
+`git config core.hooksPath .githooks` once per clone turns on the
+pre-commit hook, which checks the staged files
+(`scripts/setup-worktree.sh` does it for you).
 [AGENTS.md](AGENTS.md) has the full workflow, for people and AI agents
 alike.
 

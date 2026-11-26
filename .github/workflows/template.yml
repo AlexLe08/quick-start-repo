@@ -26,7 +26,7 @@ jobs:
       - name: shellcheck
         run: |
           mapfile -t scripts < <(find languages -name '*.sh' -exec grep -L '{{[A-Z_]*}}' {} +)
-          shellcheck scripts/*.sh "${scripts[@]}"
+          shellcheck scripts/*.sh .githooks/pre-commit "${scripts[@]}"
 
   init:
     runs-on: ubuntu-latest
@@ -138,7 +138,32 @@ jobs:
 
       - name: shellcheck
         working-directory: ${{ env.DEMO }}
-        run: shellcheck scripts/*.sh
+        run: shellcheck scripts/*.sh .githooks/pre-commit
+
+      # With the hook on, the first commit passes and a badly formatted
+      # file stops the next one.
+      - name: Pre-commit hook
+        working-directory: ${{ env.DEMO }}
+        run: |
+          git config core.hooksPath .githooks
+          git config user.name demo
+          git config user.email demo@example.invalid
+          git add -A
+          git commit -q -m "chore: set up demo-app"
+          case "$LANGUAGE" in
+            typescript) bad=src/bad.ts; printf 'export const x=1\n' >"$bad" ;;
+            python) bad=src/demo_app/bad.py; printf 'x=1\n' >"$bad" ;;
+            java) bad=src/main/java/dev/alexle/demo_app/Bad.java
+              printf 'package dev.alexle.demo_app;\nclass Bad{}\n' >"$bad" ;;
+            csharp) bad=src/DemoApp/Bad.cs; printf 'namespace DemoApp;\nclass Bad{ }\n' >"$bad" ;;
+          esac
+          git add "$bad"
+          if git commit -q -m "chore: add a badly formatted file"; then
+            echo "the hook let $bad through"
+            exit 1
+          fi
+          git rm -q --cached "$bad"
+          rm "$bad"
 
       - name: scripts/check.sh
         working-directory: ${{ env.DEMO }}

@@ -77,6 +77,10 @@ the workflow, indexed in its `README.md`.
   can't hit `main`; push with `git push -u origin <branch>`.
 - Once the PR has merged, run `scripts/cleanup-merged.sh` (a dry run),
   then `--apply`, to remove its worktree and local branch.
+- The pre-commit hook (`.githooks/pre-commit`, turned on by
+  `scripts/setup-worktree.sh`) checks the staged files: formatting and
+  lint, and spelling and secrets where typos and gitleaks are installed.
+  Never skip it with `--no-verify`; fix what it reports.
 - Done means `scripts/check.sh` passes. It runs what CI runs, one line per
   step, with full logs in `.logs/`.
 - Scratch files (probe scripts, logs) go in `.logs/` (gitignored).

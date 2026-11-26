@@ -5,8 +5,9 @@
 #
 # 1. copies languages/<language>/files/ over the repository root (its
 #    config, CI workflow, Dependabot file, starter code and the
-#    language's scripts/check.sh and scripts/setup-worktree.sh), then the
-#    files of each choice the language offers (see Choices below);
+#    language's scripts/check.sh, check-staged.sh and setup-worktree.sh),
+#    then the files of each choice the language offers (see Choices
+#    below);
 # 2. appends languages/<language>/gitignore, and each choice's, to
 #    .gitignore;
 # 3. puts languages/<language>/commands.md into AGENTS.md and
@@ -254,6 +255,7 @@ done. Next:
   1. Review:   git status && git diff
   2. Install and check:
 $(printf '%s\n' "$next_steps" | sed 's/^/       /')
+       git config core.hooksPath .githooks   # turns on the pre-commit hook
        scripts/check.sh
   3. Fill in the TODOs in README.md and AGENTS.md ("What this is").
   4. Commit and push:  git add -A && git commit -m "chore: set up $name from quick-start-repo" && git push
