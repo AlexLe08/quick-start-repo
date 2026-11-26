@@ -49,7 +49,7 @@ Every project gets:
 | --- | --- |
 | `AGENTS.md` | Instructions for any AI agent: workflow, docs, hard rules. The language's commands are added to it. |
 | `CLAUDE.md` | Imports `AGENTS.md`, plus what is specific to Claude Code |
-| `.claude/settings.json` | Shared Claude Code permissions: no force pushes, no pushes to `main`, no skipping the pre-commit hook, no merging or reviewing PRs, no reading `.env` |
+| `.claude/settings.json` | Shared Claude Code permissions: no force pushes, no pushes to `main`, no skipping the pre-commit hook, no merging or reviewing PRs, no reading `.env`, no global Git config, no `docker compose down -v` |
 | `.claude/agents/reviewer.md` | A read-only subagent that reviews a branch before its PR |
 | `.github/pull_request_template.md` | What changed, screenshots, checklist, what wasn't verified |
 | `.github/ISSUE_TEMPLATE/` | Issue forms for bug reports and feature requests, which label the issue `bug` or `enhancement` |

@@ -1,7 +1,8 @@
 ## Getting started
 
-[uv](https://docs.astral.sh/uv/) (`brew install uv`, or its installer)
-installs the Python in `.python-version` (3.13) by itself. Then:
+[uv](https://docs.astral.sh/uv/) (`mise use -g uv` with
+[mise](https://mise.jdx.dev), or `brew install uv`) uses the Python in
+`.python-version` (3.13), installing it if it can't find one. Then:
 
 ```sh
 # .venv with the dev tools
