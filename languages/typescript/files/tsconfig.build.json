@@ -1,0 +1,5 @@
+{
+  // `npm run build`: the source without its tests, emitted to dist/.
+  "extends": "./tsconfig.json",
+  "exclude": ["src/**/*.test.ts"]
+}

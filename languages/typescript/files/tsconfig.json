@@ -1,0 +1,41 @@
+{
+  // For editors and `npm run typecheck`: the source and its tests.
+  // `npm run build` emits from tsconfig.build.json, which extends this one.
+  "compilerOptions": {
+    "rootDir": "./src",
+    "outDir": "./dist",
+
+    // Node 24 runs this as ES modules; `node src/index.ts` strips the types.
+    "module": "nodenext",
+    "target": "es2024",
+    "lib": ["es2024"],
+    "types": ["node"],
+
+    "strict": true,
+    // An index or key lookup can be undefined (arr[i], record[key]), so
+    // the code has to say what happens then.
+    "noUncheckedIndexedAccess": true,
+    "noImplicitOverride": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+
+    // What Node's type stripping and other single-file tools need: every
+    // file stands alone, type-only imports say so, and no TypeScript-only
+    // runtime syntax (enum, namespace, parameter properties).
+    "verbatimModuleSyntax": true,
+    "isolatedModules": true,
+    "erasableSyntaxOnly": true,
+    "moduleDetection": "force",
+    "noUncheckedSideEffectImports": true,
+
+    // Relative imports name the source file (`./greet.ts`), as Node needs;
+    // the build rewrites them to `.js`.
+    "allowImportingTsExtensions": true,
+    "rewriteRelativeImportExtensions": true,
+
+    "sourceMap": true,
+    "declaration": true,
+    "skipLibCheck": true
+  },
+  "include": ["src"]
+}
