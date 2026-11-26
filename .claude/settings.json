@@ -22,7 +22,11 @@
       "Bash(gh ruleset *)",
       "Bash(gh repo delete *)",
       "Bash(ssh *)",
-      "Bash(scp *)"
+      "Bash(scp *)",
+      "Bash(git config --global*)",
+      "Bash(git config * --global*)",
+      "Bash(docker compose down *-v*)",
+      "Bash(docker-compose down *-v*)"
     ],
     "ask": ["Bash(git push * v*)", "Bash(git push * --tags*)"]
   },

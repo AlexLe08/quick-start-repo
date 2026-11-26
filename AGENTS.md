@@ -54,6 +54,20 @@ the workflow, indexed in its `README.md`.
   rename a job without updating the ruleset, and don't add `paths:`
   filters to the `pull_request` trigger (a required check that never runs
   waits forever).
+- The language's version comes from the project's version file
+  (`.nvmrc`, `.python-version`, `.java-version` or `global.json`), which
+  mise and CI read. Never change a global version (`mise use -g`,
+  `brew install` a language) to get something running; if the pin looks
+  wrong, say so. Command-line tools (gh, typos, gitleaks) come from
+  Homebrew.
+- Never change global Git config (`git config --global`): the owner's
+  `~/.gitconfig` is a link into a dotfiles repository, so the change
+  would land there. Settings for this repository alone (plain
+  `git config`) are fine.
+- A service the project runs locally (a database, a queue) is defined in
+  `compose.yaml`: the image pinned to a major version, ports bound to
+  `127.0.0.1`, credentials read from `.env`. `docker compose down -v`
+  deletes its data; never run it, ask the owner to.
 
 ## Workflow
 
