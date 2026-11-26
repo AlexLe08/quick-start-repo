@@ -18,7 +18,7 @@ The records below came with the
 [quick-start-repo](https://github.com/AlexLe08/quick-start-repo) template;
 they hold for this project until a new record supersedes one.
 
-| Record | Decision | Status |
-| --- | --- | --- |
-| [0001](0001-small-prs-squash-only.md) | Small PRs to `main`, squash-merged, titled in Conventional Commits | Accepted · 2026-11-26 |
+| Record                                        | Decision                                                           | Status                |
+| --------------------------------------------- | ------------------------------------------------------------------ | --------------------- |
+| [0001](0001-small-prs-squash-only.md)         | Small PRs to `main`, squash-merged, titled in Conventional Commits | Accepted · 2026-11-26 |
 | [0002](0002-agents-md-for-ai-instructions.md) | AI instructions live in `AGENTS.md`; `CLAUDE.md` only points to it | Accepted · 2026-11-26 |

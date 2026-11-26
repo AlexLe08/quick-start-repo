@@ -22,10 +22,7 @@
       "Bash(ssh *)",
       "Bash(scp *)"
     ],
-    "ask": [
-      "Bash(git push * v*)",
-      "Bash(git push * --tags*)"
-    ]
+    "ask": ["Bash(git push * v*)", "Bash(git push * --tags*)"]
   },
   "attribution": {
     "commit": "",
