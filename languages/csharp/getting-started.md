@@ -1,8 +1,10 @@
 ## Getting started
 
-The .NET 10 SDK, the version in `global.json`
-([download](https://dotnet.microsoft.com/download/dotnet/10.0), or
-`brew install --cask dotnet-sdk`). Then:
+The .NET 10 SDK, the version in `global.json`: `mise install` with
+[mise](https://mise.jdx.dev) (once per machine,
+`mise settings add idiomatic_version_file_enable_tools dotnet` lets it
+read `global.json`), or Microsoft's
+[download](https://dotnet.microsoft.com/download/dotnet/10.0). Then:
 
 ```sh
 # restore the locked packages

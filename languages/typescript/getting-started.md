@@ -1,8 +1,10 @@
 ## Getting started
 
-Node's latest LTS: [nvm](https://github.com/nvm-sh/nvm)'s `nvm install`
-reads `.nvmrc`, or with [mise](https://mise.jdx.dev),
-`mise use -g node@lts`.
+Node's latest LTS, which `.nvmrc` names: `mise install` with
+[mise](https://mise.jdx.dev) (once per machine,
+`mise settings add idiomatic_version_file_enable_tools node` lets it read
+`.nvmrc`), or `nvm install` with [nvm](https://github.com/nvm-sh/nvm).
+Either leaves your global Node alone.
 <!-- option:package-manager -->
 Then:
 
