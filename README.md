@@ -74,7 +74,7 @@ hook's quick checks) and `scripts/setup-worktree.sh`:
 | --- | --- |
 | `typescript` | Node's latest LTS; npm, pnpm or Bun; TypeScript (strict), ESLint (typescript-eslint), Prettier, knip; Vitest, `node:test` or Jest |
 | `python` | Python 3.13, uv, ruff, pytest; mypy, pyright or ty; pip-audit in CI |
-| `java` | Java 25 (LTS); Maven or Gradle; JUnit 6, google-java-format (Spotless), JaCoCo |
+| `java` | Java 25 (LTS); Maven or Gradle, each through its wrapper; JUnit 6, google-java-format (Spotless), JaCoCo |
 | `csharp` | .NET 10 (LTS), xUnit v3, `dotnet format`, analyzers as errors |
 
 Claude Code adds no co-author line to commits or PRs

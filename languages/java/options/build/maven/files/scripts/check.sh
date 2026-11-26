@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # The checks CI runs (.github/workflows/ci.yml, the `check` job):
-# formatting, then `mvn verify` (compile with warnings as errors, tests,
+# formatting, then `./mvnw verify` (compile with warnings as errors, tests,
 # coverage minimum).
 # Prints one line per step; the full output of each goes to
 # .logs/<step>.log, and a failing step also prints its last 30 lines.
@@ -28,8 +28,8 @@ run() {
   fi
 }
 
-run format mvn -B spotless:check
-run verify mvn -B verify
+run format ./mvnw -B spotless:check
+run verify ./mvnw -B verify
 
 # Spelling, as CI's typos job (spelling.yml) checks it, where typos is
 # installed (`brew install typos-cli`).

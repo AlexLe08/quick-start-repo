@@ -1,8 +1,11 @@
-Java 25 and Maven 3.9+ (`mise use java@temurin-25` and
-`brew install maven`, or your own way), then:
+Java 25 (`mise use -g java@temurin-25`, or your own way); `./mvnw`
+downloads Maven itself. Then:
 
 ```sh
-mvn -B verify                                         # build, test, check
-java -jar target/{{PROJECT_NAME}}-0.1.0-SNAPSHOT.jar  # run it
-scripts/check.sh                                      # what CI runs
+# build, test, check
+./mvnw -B verify
+# run it
+java -jar target/{{PROJECT_NAME}}-0.1.0-SNAPSHOT.jar
+# what CI runs
+scripts/check.sh
 ```

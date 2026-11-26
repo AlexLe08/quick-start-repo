@@ -132,7 +132,7 @@ jobs:
           case "$LANGUAGE" in
             typescript) "$PM" install ;;
             python) uv sync ;;
-            java) [[ ! -f pom.xml ]] || mvn -B -q dependency:go-offline ;;
+            java) [[ ! -f pom.xml ]] || ./mvnw -B -q dependency:go-offline ;;
             csharp) dotnet restore ;;
           esac
 

@@ -1,1 +1,1 @@
-mvn -B verify        # downloads dependencies, builds and tests
+./mvnw -B verify     # downloads Maven and the dependencies, builds and tests

@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
 # Prepares a fresh checkout (usually a git worktree under .claude/worktrees/)
-# to run: Maven's dependencies and plugins downloaded (into ~/.m2, shared
-# by every checkout), and the main checkout's .env, if it has one. Safe to
-# re-run; an existing .env in the worktree is left alone.
+# to run: Maven (through ./mvnw), its dependencies and plugins downloaded
+# (into ~/.m2, shared by every checkout), and the main checkout's .env,
+# if it has one. Safe to re-run; an existing .env in the worktree is left
+# alone.
 # Also turns on the pre-commit hook (.githooks/pre-commit).
 #
 # Usage: scripts/setup-worktree.sh
@@ -12,8 +13,8 @@ root="$(cd "$(dirname "$0")/.." && pwd -P)"
 # The first entry of `git worktree list` is always the main checkout.
 main_checkout="$(git -C "$root" worktree list --porcelain | head -n 1 | sed 's/^worktree //')"
 
-echo "mvn dependency:go-offline"
-(cd "$root" && mvn -B -q dependency:go-offline)
+echo "./mvnw dependency:go-offline"
+(cd "$root" && ./mvnw -B -q dependency:go-offline)
 
 if [[ "$root" != "$main_checkout" && -f "$main_checkout/.env" && ! -e "$root/.env" ]]; then
   cp "$main_checkout/.env" "$root/.env"

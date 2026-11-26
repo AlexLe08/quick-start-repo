@@ -19,7 +19,8 @@ jobs:
         with:
           persist-credentials: false
 
-      # Maven itself comes with the runner image.
+      # ./mvnw downloads the Maven version in
+      # .mvn/wrapper/maven-wrapper.properties.
       - uses: actions/setup-java@d1374f8ac74474200d16ef8ecee22c7ae7a51880 # v6.3.0
         with:
           distribution: temurin
@@ -27,8 +28,8 @@ jobs:
           cache: maven
 
       - name: Format
-        run: mvn -B spotless:check
+        run: ./mvnw -B spotless:check
 
       # Compile (warnings are errors), tests, coverage minimum.
       - name: Verify
-        run: mvn -B verify
+        run: ./mvnw -B verify
