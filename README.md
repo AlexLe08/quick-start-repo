@@ -100,6 +100,10 @@ it back.
   ([decision 0002](docs/decisions/0002-agents-md-for-ai-instructions.md)).
 - Agent roles live in `AGENTS.md`; agent files and skills point to them
   ([decision 0003](docs/decisions/0003-agent-roles-in-agents-md.md)).
+- The owner merges PRs by default; a project worked hands-off can let
+  the main session merge its own once CI is green and the reviewer
+  passes it (the `Merges:` line in `AGENTS.md`,
+  [decision 0004](docs/decisions/0004-who-merges-is-per-project.md)).
 - Free tiers only.
 
 ## Changing the template
