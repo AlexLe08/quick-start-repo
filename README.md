@@ -50,7 +50,8 @@ Every project gets:
 | `AGENTS.md` | Instructions for any AI agent: workflow, docs, hard rules. The language's commands are added to it. |
 | `CLAUDE.md` | Imports `AGENTS.md`, plus what is specific to Claude Code |
 | `.claude/settings.json` | Shared Claude Code permissions: no force pushes, no pushes to `main`, no skipping the pre-commit hook, no merging or reviewing PRs, no reading `.env`, no global Git config, no `docker compose down -v` |
-| `.claude/agents/reviewer.md` | A read-only subagent that reviews a branch before its PR |
+| `.claude/agents/` | Subagents for the roles in `AGENTS.md`: a planner and a reviewer (read-only) and an implementer |
+| `.agents/skills/` | Skills any agent can follow (`open-pr`, `decision-record`), linked from `.claude/skills/` for Claude Code |
 | `.github/pull_request_template.md` | What changed, screenshots, checklist, what wasn't verified |
 | `.github/ISSUE_TEMPLATE/` | Issue forms for bug reports and feature requests, which label the issue `bug` or `enhancement` |
 | `.github/workflows/` | `pr-title.yml` (Conventional Commits title, and a label from it), `security.yml` (gitleaks secret scan, zizmor workflow audit), `spelling.yml` (typos); each language adds `ci.yml` and `codeql.yml` |
@@ -97,6 +98,12 @@ it back.
   goes in `docs/`, and decisions in `docs/decisions/`.
 - AI instructions live in `AGENTS.md`
   ([decision 0002](docs/decisions/0002-agents-md-for-ai-instructions.md)).
+- Agent roles live in `AGENTS.md`; agent files and skills point to them
+  ([decision 0003](docs/decisions/0003-agent-roles-in-agents-md.md)).
+- The owner merges PRs by default; a project worked hands-off can let
+  the main session merge its own once CI is green and the reviewer
+  passes it (the `Merges:` line in `AGENTS.md`,
+  [decision 0004](docs/decisions/0004-who-merges-is-per-project.md)).
 - Free tiers only.
 
 ## Changing the template

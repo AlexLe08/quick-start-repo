@@ -26,7 +26,9 @@ Under **Pull Requests**:
   squash, and the `check` (`ci.yml`), `pr-title`, `gitleaks`
   (`security.yml`) and `typos` (`spelling.yml`) jobs must pass on a
   branch that is up to date with `main`. No approval is required, since
-  one person owns the repository; the owner merges by convention.
+  one person owns the repository. Who merges is the `Merges:` line in
+  `AGENTS.md` (Agent workflow, Merging): the owner by default, or the
+  main session for a project the owner doesn't review PR by PR.
 - [`.github/rulesets/tags.json`](../.github/rulesets/tags.json): a pushed
   `v*` tag can't be moved or deleted. Only needed for a project that
   publishes releases.

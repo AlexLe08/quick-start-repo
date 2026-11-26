@@ -22,6 +22,7 @@ the workflow, indexed in its `README.md`.
   in the PR that changes course, and say so in the PR.
 - Never write a record's **Why**: draft Context and Consequences from the
   history and leave the Why as `TODO(Alex)` for the owner.
+- The `decision-record` skill has the steps for drafting one.
 
 <!-- language:commands -->
 
@@ -72,11 +73,11 @@ the workflow, indexed in its `README.md`.
 ## Workflow
 
 - `main` is protected by a ruleset: branch off `main`, open a PR, CI
-  green, the owner merges. Never push to `main` (the one exception was the
-  setup commit, pushed before the rulesets existed). Keep PRs small, one
-  change each; a large change is a series of them, each passing the
-  checks. When one PR needs another that hasn't merged, base it on that
-  branch and say so.
+  green, then the merge, by whoever Merging (under Agent workflow) names.
+  Never push to `main` (the one exception was the setup commit, pushed
+  before the rulesets existed). Keep PRs small, one change each; a large
+  change is a series of them, each passing the checks. When one PR needs
+  another that hasn't merged, base it on that branch and say so.
 - Commits and PR titles follow
   [Conventional Commits](https://www.conventionalcommits.org/):
   `feat`, `fix`, `docs`, `test`, `ci`, `refactor`, `chore`, `deps`,
@@ -106,12 +107,126 @@ the workflow, indexed in its `README.md`.
 - Stay inside the task: no drive-by refactors, renames, or new
   dependencies; list what you noticed instead.
 - Commit in small logical steps. Agents may commit and push their task
-  branch (never `--force`). The `reviewer` agent (`.claude/agents/`)
-  reviews the branch before the PR is opened; only the owner approves,
-  merges, and pushes release tags.
+  branch (never `--force`). The reviewer (see Agent workflow) reviews the
+  branch before the PR is opened. Only the owner approves PRs and pushes
+  release tags; who merges is set under Merging.
 - Stage files by name and check `git diff --staged` before committing,
   never `git commit -a`: an editor or tool may have changed tracked files.
 - Open the PR with `gh pr create --title "<type>: …" --body-file <file>`,
   the body following `.github/pull_request_template.md` (plain
   `gh pr create` asks for both), or on GitHub. Fill in the template,
-  including what you couldn't verify.
+  including what you couldn't verify. The `open-pr` skill has the steps.
+
+## Agent workflow
+
+A task too big for one pass is split between specialized agents. Each
+role is written once, here; a tool's own agent file (`.claude/agents/`
+for Claude Code) only points to its role, so adding another tool means
+one short file per role, not a copy of the rules.
+
+- The main session orchestrates. It reads the request and
+  `docs/roadmap.md`, asks the planner for a plan when the change is more
+  than a small fix, creates each task's worktree
+  (`scripts/new-worktree.sh <branch>`), gives each task to an
+  implementer, has the reviewer check the branch, opens the PR, and
+  merges it when Merging (below) says agents merge. Only the main
+  session talks to the owner; agents report to it.
+- An agent starts without the conversation: its prompt carries the task,
+  the plan step, the worktree path and the branch.
+- One implementer per worktree and branch. Tasks that don't depend on
+  each other may run at the same time, each in its own worktree.
+- Skills are step-by-step procedures any agent can follow, in
+  `.agents/skills/<name>/SKILL.md` (the
+  [Agent Skills](https://agentskills.io) format; `.claude/skills` links
+  there for Claude Code). Add one when the same steps keep being
+  explained; add an agent only when the same kind of worker keeps being
+  started with the same instructions.
+
+### Planner
+
+Plans one change; read-only, never edits.
+
+1. Read the request, `docs/roadmap.md`, the decision records that cover
+   the area, and the code it touches.
+2. For each real design decision, compare the realistic options briefly,
+   pick one, and say why it beats the others.
+3. Write the plan:
+   - The goal, and what is out of scope.
+   - Tasks in order, each small enough to review as one PR. For each: a
+     branch name, the files to change, the tests to add, the rules and
+     decision records that apply, and how to verify it beyond
+     `scripts/check.sh`.
+   - New dependencies (the owner's call), decision records to propose,
+     and docs or roadmap updates.
+   - Open questions only the owner can answer.
+
+### Implementer
+
+Implements one planned task in the worktree it is given.
+
+1. Work only in that worktree, and check that `git branch --show-current`
+   there is the task's branch. No worktree path: stop and ask for one;
+   don't create one.
+2. Make the change, with tests for new behaviour, and update the docs the
+   change touches. Check library APIs against current docs, not memory.
+3. Run `scripts/check.sh` until it passes. If it still fails after two
+   honest attempts, stop and report rather than widening the change.
+4. Commit in small logical steps and push with
+   `git push -u origin <branch>`.
+5. Report the files changed, the check's output lines, what was verified
+   and how, what wasn't, and anything noticed outside the task.
+
+### Reviewer
+
+Reviews one task branch before its PR; read-only, never edits, commits
+or pushes. Runs only read-only commands (`git diff`, `git log`,
+`git show`, `git status`) and `scripts/check.sh`, which leaves tracked
+files untouched. Never runs anything that reaches production or a live
+service.
+
+1. In the worktree it is given, read the task, then
+   `git diff origin/main...HEAD` and `git status` (leftover uncommitted
+   files are a finding).
+2. Check:
+   - Every rule in this file the diff touches, and any decision record
+     that covers the changed area.
+   - Correctness: bugs, edge cases, error handling, and what happens when
+     a call fails.
+   - Security: secrets in code or logs, unchecked input, and anything a
+     user could make the program do that they shouldn't.
+   - Tests: new behaviour is tested; no test was deleted, skipped, or
+     loosened, except the tests of code the task deletes, and the PR says
+     so.
+   - Scope: no drive-by refactors, renames or new dependencies.
+   - Docs: the README and `docs/` pages that now need an edit, and
+     `docs/roadmap.md`: the branch's Done entry, and its Next up or Later
+     item moved or removed.
+3. Run `scripts/check.sh` to confirm the result.
+4. Report each finding as `path:line`, severity (blocker, should-fix,
+   nit), the rule or reason, and a suggested fix. Then what was checked,
+   what wasn't, and a verdict: pass or changes needed.
+
+### Merging
+
+Merges: owner
+
+The owner sets this line to `owner` or `agents`, per project; agents
+never change it.
+
+- `owner`: the main session stops at the open PR and reports it; the
+  owner reviews and merges.
+- `agents`: the main session merges its own PR once the reviewer's
+  verdict is pass, every required check is green on the PR's head, the
+  PR has no conflicts, and no comment on it asks to wait. It merges that
+  exact head, `gh pr merge <number> --squash --match-head-commit <sha>`,
+  then runs `scripts/cleanup-merged.sh --apply` and reports what merged.
+  If GitHub refuses because the branch is behind `main`, it merges
+  `origin/main` into the branch, pushes, and waits for the checks again.
+  A PR waits for the owner instead when it adds a runtime dependency,
+  publishes a release, or changes `.github/`, `.githooks/`,
+  `.claude/settings.json` or this section.
+
+Switching to `agents` also means deleting `"Bash(gh pr merge *)"` from
+the `deny` list in `.claude/settings.json`, which blocks merging while
+the line says `owner`. Approving PRs, pushing release tags and approving
+deploys stay with the owner either way.
