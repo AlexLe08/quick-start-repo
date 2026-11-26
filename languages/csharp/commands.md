@@ -10,7 +10,8 @@ its xUnit v3 tests in `tests/{{PASCAL_NAME}}.Tests/`.
 - `dotnet run --project src/{{PASCAL_NAME}}`: run the program
 - `dotnet build`: compile; every warning and recommended analyzer
   finding is an error (`Directory.Build.props`)
-- `dotnet test`: the tests
+- `dotnet test`: the tests, on Microsoft.Testing.Platform (`global.json`
+  opts in; the .NET 10 SDK no longer runs xUnit v3 through VSTest)
 - `dotnet format`: format and apply the `.editorconfig` style;
   `dotnet format --verify-no-changes` only checks
 - `scripts/check.sh`: everything CI's `check` job runs, one line per step.
