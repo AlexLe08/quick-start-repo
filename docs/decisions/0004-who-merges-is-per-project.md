@@ -21,7 +21,9 @@ PR after the reviewer passes it and CI is green, except PRs that add a
 runtime dependency, publish a release or change the project's guard rails
 (`.github/`, `.githooks/`, `.claude/settings.json`, the Merging section).
 
-**Why:** TODO(Alex)
+**Why:** 
+
+Good practice dictates I should read code diffs in an agentic workflow. Some projects in recent times, as well as workflows, are getting stronger at leaving AI  on its own, so giving the option to allow it to merge when it approves is a step towards experiencing and possibly refining this hands off workflow on some projects. Releases and deploys still remain with me as the final action in the pipeline, rather than having more points early on to being the velocity bottleneck.
 
 ## Consequences
 
