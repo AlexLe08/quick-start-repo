@@ -27,10 +27,10 @@ run() {
   fi
 }
 
-run lint npm run lint
-run format npm run format:check
-run typecheck npm run typecheck
-run test npm test
-run build npm run build
+run lint {{PM_RUN}} lint
+run format {{PM_RUN}} format:check
+run typecheck {{PM_RUN}} typecheck
+run test {{PM_TEST}}
+run build {{PM_RUN}} build
 
 exit "$failed"

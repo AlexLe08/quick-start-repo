@@ -5,4 +5,4 @@ dist/
 coverage/
 .logs/
 .claude/worktrees/
-package-lock.json
+{{PM_LOCKFILE}}

@@ -1,0 +1,8 @@
+PM=npm
+PM_INSTALL=npm install
+PM_CI=npm ci
+PM_RUN=npm run
+PM_TEST=npm test
+PM_ADD=npm install
+PM_LOCKFILE=package-lock.json
+PM_ECOSYSTEM=npm

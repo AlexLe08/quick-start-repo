@@ -125,6 +125,11 @@ provenance itself. Free for public packages.
              if [[ "$version" == *-* ]]; then npm publish --tag next; else npm publish; fi
    ```
 
+   With pnpm or Bun, put the project's `ci.yml` steps that install the
+   package manager and the dependencies in place of `npm ci`; `npm
+   publish` still does the publishing, since it is what npm's trusted
+   publishing checks.
+
 3. On npmjs.com, the package's Settings → Trusted publishing → GitHub
    Actions: the GitHub user, the repository, workflow `release.yml`
    (file name only), no environment, and `npm publish` allowed. Every field

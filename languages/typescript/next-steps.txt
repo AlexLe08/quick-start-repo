@@ -1,1 +1,1 @@
-npm install          # writes package-lock.json; commit it
+{{PM_INSTALL}}         # writes {{PM_LOCKFILE}}; commit it

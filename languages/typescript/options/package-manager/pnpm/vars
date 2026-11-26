@@ -1,0 +1,8 @@
+PM=pnpm
+PM_INSTALL=pnpm install
+PM_CI=pnpm install --frozen-lockfile
+PM_RUN=pnpm
+PM_TEST=pnpm test
+PM_ADD=pnpm add
+PM_LOCKFILE=pnpm-lock.yaml
+PM_ECOSYSTEM=npm

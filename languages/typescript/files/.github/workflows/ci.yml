@@ -19,26 +19,20 @@ jobs:
         with:
           persist-credentials: false
 
-      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
-        with:
-          node-version-file: .nvmrc
-          cache: npm
-
-      - name: Install dependencies
-        run: npm ci
+      # option:package-manager-setup
 
       - name: Lint
-        run: npm run lint
+        run: {{PM_RUN}} lint
 
       - name: Format
-        run: npm run format:check
+        run: {{PM_RUN}} format:check
 
       - name: Type-check
-        run: npm run typecheck
+        run: {{PM_RUN}} typecheck
 
-      # Fails below the coverage thresholds in vitest.config.ts.
+      # Fails below the test runner's coverage thresholds.
       - name: Tests and coverage
-        run: npm test
+        run: {{PM_TEST}}
 
       - name: Build
-        run: npm run build
+        run: {{PM_RUN}} build

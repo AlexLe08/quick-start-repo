@@ -1,0 +1,8 @@
+PM=Bun
+PM_INSTALL=bun install
+PM_CI=bun install --frozen-lockfile
+PM_RUN=bun run
+PM_TEST=bun run test
+PM_ADD=bun add
+PM_LOCKFILE=bun.lock
+PM_ECOSYSTEM=bun

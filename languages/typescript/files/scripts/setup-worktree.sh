@@ -11,8 +11,8 @@ root="$(cd "$(dirname "$0")/.." && pwd -P)"
 # The first entry of `git worktree list` is always the main checkout.
 main_checkout="$(git -C "$root" worktree list --porcelain | head -n 1 | sed 's/^worktree //')"
 
-echo "npm ci"
-(cd "$root" && npm ci --loglevel=error --no-audit --no-fund)
+echo "{{PM_CI}}"
+(cd "$root" && {{PM_CI}})
 
 if [[ "$root" != "$main_checkout" && -f "$main_checkout/.env" && ! -e "$root/.env" ]]; then
   cp "$main_checkout/.env" "$root/.env"

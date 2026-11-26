@@ -2,7 +2,7 @@
   "recommendations": [
     "dbaeumer.vscode-eslint",
     "esbenp.prettier-vscode",
-    "vitest.explorer",
+    "option:test-extension",
     "editorconfig.editorconfig",
     "github.vscode-github-actions"
   ]

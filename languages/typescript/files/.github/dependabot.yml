@@ -3,13 +3,11 @@
 # Every PR runs CI like any other and waits for the owner to merge.
 version: 2
 updates:
-  - package-ecosystem: npm
+  - package-ecosystem: {{PM_ECOSYSTEM}}
     directory: /
     schedule:
       interval: monthly
-    # Ranges stay open upward: a minor or patch moves only the lockfile,
-    # a major raises the range.
-    versioning-strategy: increase-if-necessary
+    # option:dependabot-versioning
     # A release has to be a week old before a PR proposes it, so a
     # compromised version is usually caught and pulled first.
     cooldown:
@@ -24,7 +22,7 @@ updates:
       - dependency-name: typescript
         versions: [">=6.1.0"]
     groups:
-      npm:
+      {{PM_ECOSYSTEM}}:
         patterns: ["*"]
     commit-message:
       prefix: deps

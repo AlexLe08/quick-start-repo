@@ -1,6 +1,6 @@
 {
-  // For editors and `npm run typecheck`: the source and its tests.
-  // `npm run build` emits from tsconfig.build.json, which extends this one.
+  // For editors and `{{PM_RUN}} typecheck`: the source and its tests.
+  // `{{PM_RUN}} build` emits from tsconfig.build.json, which extends this one.
   "compilerOptions": {
     "rootDir": "./src",
     "outDir": "./dist",
