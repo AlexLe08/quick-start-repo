@@ -70,9 +70,10 @@ Every project gets:
 
 Each language in [`languages/`](languages/) adds its own config, CI and
 CodeQL workflows, Dependabot file (monthly, grouped, a week's cooldown),
-editor settings, starter code and test, `scripts/check.sh` (everything CI
-runs, one line per step), `scripts/check-staged.sh` (the pre-commit
-hook's quick checks) and `scripts/setup-worktree.sh`:
+VS Code settings and debugger launch configuration, starter code and
+test, `scripts/check.sh` (everything CI runs, one line per step),
+`scripts/check-staged.sh` (the pre-commit hook's quick checks) and
+`scripts/setup-worktree.sh`:
 
 | Language | Toolchain |
 | --- | --- |

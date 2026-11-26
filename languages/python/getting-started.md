@@ -16,3 +16,6 @@ Settings come from environment variables, each listed in `.env.example`.
 `cp .env.example .env` and fill in your own values; `.env` is gitignored.
 `uv run --env-file .env {{PROJECT_NAME}}` loads it, and so does VS Code's
 Python extension when it runs or debugs the code.
+
+In VS Code, F5 runs the program under the debugger, and the Testing view
+runs or debugs a single test.
