@@ -1,10 +1,13 @@
 ## Getting started
 
-[uv](https://docs.astral.sh/uv/) installs the Python in
-`.python-version` (3.13) by itself:
+[uv](https://docs.astral.sh/uv/) (`brew install uv`, or its installer)
+installs the Python in `.python-version` (3.13) by itself. Then:
 
 ```sh
-uv sync                    # .venv with the dev tools
-uv run {{PROJECT_NAME}}    # runs the program
-scripts/check.sh           # lint, format, type check, tests
+# .venv with the dev tools
+uv sync
+# run the program
+uv run {{PROJECT_NAME}}
+# lint, format, type check, tests: what CI runs
+scripts/check.sh
 ```

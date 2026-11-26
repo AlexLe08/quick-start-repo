@@ -15,6 +15,17 @@ pre-commit hook, which checks the staged files
 [AGENTS.md](AGENTS.md) has the full workflow, for people and AI agents
 alike.
 
+A few more tools help, on top of the language's:
+
+- [gh](https://cli.github.com), GitHub's command line
+  (`brew install gh`, then `gh auth login`): opens PRs from the terminal,
+  and lets `scripts/cleanup-merged.sh` tell when a branch was
+  squash-merged
+- [typos](https://github.com/crate-ci/typos) and
+  [gitleaks](https://github.com/gitleaks/gitleaks)
+  (`brew install typos-cli gitleaks`): the pre-commit hook and
+  `scripts/check.sh` run them when they're installed; CI always does
+
 ## Docs
 
 - [docs/roadmap.md](docs/roadmap.md): where the project stands and what's next

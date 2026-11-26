@@ -7,6 +7,9 @@ setup script keeps only that one.
 
 ## Start a project
 
+You need git and bash (macOS's own are fine). The language's tools come
+later: the README the setup script writes lists them.
+
 1. On GitHub, **Use this template → Create a new repository**, then clone
    it.
 2. In the new repository's root:

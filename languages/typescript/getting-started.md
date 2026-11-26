@@ -1,7 +1,8 @@
 ## Getting started
 
-Node's latest LTS (`.nvmrc`; `nvm install` or `mise install` picks it
-up).
+Node's latest LTS: [nvm](https://github.com/nvm-sh/nvm)'s `nvm install`
+reads `.nvmrc`, or with [mise](https://mise.jdx.dev),
+`mise use -g node@lts`.
 <!-- option:package-manager -->
 Then:
 
