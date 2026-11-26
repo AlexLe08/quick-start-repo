@@ -35,4 +35,12 @@ run typecheck {{PM_RUN}} typecheck
 run test {{PM_TEST}}
 run build {{PM_RUN}} build
 
+# Spelling, as CI's typos job (spelling.yml) checks it, where typos is
+# installed (`brew install typos-cli`).
+if command -v typos >/dev/null 2>&1; then
+  run spelling typos
+else
+  echo "skip  spelling  (typos isn't installed)"
+fi
+
 exit "$failed"

@@ -32,4 +32,12 @@ run format uv run ruff format --check .
 run typecheck uv run {{TYPECHECK}}
 run test uv run pytest -q
 
+# Spelling, as CI's typos job (spelling.yml) checks it, where typos is
+# installed (`brew install typos-cli`).
+if command -v typos >/dev/null 2>&1; then
+  run spelling typos
+else
+  echo "skip  spelling  (typos isn't installed)"
+fi
+
 exit "$failed"

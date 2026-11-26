@@ -1,0 +1,19 @@
+# typos, the spell checker (.github/workflows/spelling.yml, and
+# scripts/check.sh and the pre-commit hook where it's installed). A word
+# it gets wrong goes under [default.extend-words], mapped to itself:
+#
+#   [default.extend-words]
+#   teh = "teh"
+
+[files]
+# Dotfiles and folders (.github/, .claude/) are checked too.
+ignore-hidden = false
+extend-exclude = [
+  ".git/",
+  # Lockfiles hold hashes and names nobody here chose.
+  "package-lock.json",
+  "pnpm-lock.yaml",
+  "bun.lock",
+  "uv.lock",
+  "packages.lock.json",
+]

@@ -49,9 +49,9 @@ Every project gets:
 | `.claude/agents/reviewer.md` | A read-only subagent that reviews a branch before its PR |
 | `.github/pull_request_template.md` | What changed, screenshots, checklist, what wasn't verified |
 | `.github/ISSUE_TEMPLATE/` | Issue forms for bug reports and feature requests, which label the issue `bug` or `enhancement` |
-| `.github/workflows/` | `pr-title.yml` (Conventional Commits title, and a label from it), `security.yml` (gitleaks secret scan, zizmor workflow audit); each language adds `ci.yml` and `codeql.yml` |
+| `.github/workflows/` | `pr-title.yml` (Conventional Commits title, and a label from it), `security.yml` (gitleaks secret scan, zizmor workflow audit), `spelling.yml` (typos); each language adds `ci.yml` and `codeql.yml` |
 | `.github/release.yml` | Sorts generated release notes into breaking changes, features, fixes and the rest, by the label `pr-title.yml` sets |
-| `.github/rulesets/` | Rulesets to import: `main` protected, squash only, `check`, `pr-title` and `gitleaks` required; release tags locked |
+| `.github/rulesets/` | Rulesets to import: `main` protected, squash only, `check`, `pr-title`, `gitleaks` and `typos` required; release tags locked |
 | `docs/decisions/` | Decision records, starting with the workflow's |
 | `docs/roadmap.md` | Now, Next up, Later, Done |
 | `docs/github-setup.md` | The settings to apply by hand |
@@ -59,6 +59,7 @@ Every project gets:
 | `.githooks/pre-commit` | Checks the staged files before each commit: the language's formatter and linter (`scripts/check-staged.sh`), and typos and gitleaks when they're installed. `scripts/setup-worktree.sh` turns it on |
 | `scripts/new-worktree.sh` | Starts a task: a branch and worktree from the latest `origin/main` |
 | `scripts/cleanup-merged.sh` | After a merge, removes that task's worktree and branch |
+| `.typos.toml` | Words the spell checker should accept |
 | `.gitignore`, `.gitattributes`, `.editorconfig` | OS, editor and secret files ignored; LF line endings; indent per file type |
 | `SECURITY.md` | Report vulnerabilities privately through GitHub, not in an issue |
 | `LICENSE` | MIT, with the year set when the project is set up |

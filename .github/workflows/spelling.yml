@@ -1,0 +1,24 @@
+# Misspellings in code, comments and docs, found by typos
+# (github.com/crate-ci/typos). It flags only words on its list of known
+# misspellings, so it rarely needs telling about a real word; when it
+# does, the word goes in .typos.toml. A required check in
+# .github/rulesets/main.json.
+name: Spelling
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  typos:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: crate-ci/typos@276087d9a4f06398b3e04825487805e2d7375888 # v1.52.2

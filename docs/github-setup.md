@@ -23,10 +23,10 @@ Under **Pull Requests**:
 
 - [`.github/rulesets/main.json`](../.github/rulesets/main.json): `main`
   can't be deleted or force-pushed, changes go through a PR merged by
-  squash, and the `check` (`ci.yml`), `pr-title` and `gitleaks`
-  (`security.yml`) jobs must pass on a branch that is up to date with
-  `main`. No approval is required, since one person owns the
-  repository; the owner merges by convention.
+  squash, and the `check` (`ci.yml`), `pr-title`, `gitleaks`
+  (`security.yml`) and `typos` (`spelling.yml`) jobs must pass on a
+  branch that is up to date with `main`. No approval is required, since
+  one person owns the repository; the owner merges by convention.
 - [`.github/rulesets/tags.json`](../.github/rulesets/tags.json): a pushed
   `v*` tag can't be moved or deleted. Only needed for a project that
   publishes releases.

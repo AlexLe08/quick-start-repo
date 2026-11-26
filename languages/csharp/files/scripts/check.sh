@@ -32,4 +32,12 @@ run format dotnet format --verify-no-changes
 run build dotnet build
 run test dotnet test --no-build
 
+# Spelling, as CI's typos job (spelling.yml) checks it, where typos is
+# installed (`brew install typos-cli`).
+if command -v typos >/dev/null 2>&1; then
+  run spelling typos
+else
+  echo "skip  spelling  (typos isn't installed)"
+fi
+
 exit "$failed"
