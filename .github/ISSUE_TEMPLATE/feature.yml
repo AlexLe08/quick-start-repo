@@ -1,0 +1,21 @@
+name: Feature request
+description: An idea for something new, or a change to something that works.
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: The problem
+      description: What's hard or impossible today, and who it affects.
+    validations:
+      required: true
+  - type: textarea
+    id: idea
+    attributes:
+      label: The idea
+      description: What would solve it. A sketch is enough.
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives
+      description: Other ways around it, including ones already tried.

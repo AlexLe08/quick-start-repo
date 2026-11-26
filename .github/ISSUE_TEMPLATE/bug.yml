@@ -1,0 +1,31 @@
+# Issue forms: GitHub shows these when someone opens an issue. A blank
+# issue is still allowed, for quick notes.
+name: Bug report
+description: Something doesn't work the way it should.
+labels: ["bug"]
+body:
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened
+      description: What you did, what you expected, and what happened instead.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. …
+        2. …
+  - type: input
+    id: version
+    attributes:
+      label: Version
+      description: The release or commit, and the OS or browser if it matters.
+  - type: textarea
+    id: logs
+    attributes:
+      label: Error output or logs
+      description: Pasted as text; no secrets or tokens.
+      render: text

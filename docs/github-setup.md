@@ -39,8 +39,8 @@ the ruleset, or every PR waits for a check that never comes.
 - **Dependabot alerts** and **Dependabot security updates**: on.
 - **Secret scanning** and **Push protection**: on (free for public
   repositories).
-- **Private vulnerability reporting**: on, for a public project that
-  others use.
+- **Private vulnerability reporting**: on. `SECURITY.md` asks people to
+  report problems that way, and the new-issue page links to it.
 - **Code scanning**: nothing to set up; `.github/workflows/codeql.yml`
   uploads its results. It needs a public repository (or paid Advanced
   Security), so delete that workflow in a private one. zizmor in

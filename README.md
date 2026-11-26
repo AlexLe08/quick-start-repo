@@ -48,6 +48,7 @@ Every project gets:
 | `.claude/settings.json` | Shared Claude Code permissions: no force pushes, no pushes to `main`, no merging or reviewing PRs, no reading `.env` |
 | `.claude/agents/reviewer.md` | A read-only subagent that reviews a branch before its PR |
 | `.github/pull_request_template.md` | What changed, screenshots, checklist, what wasn't verified |
+| `.github/ISSUE_TEMPLATE/` | Issue forms for bug reports and feature requests, which label the issue `bug` or `enhancement` |
 | `.github/workflows/` | `pr-title.yml` (Conventional Commits title), `security.yml` (gitleaks secret scan, zizmor workflow audit); each language adds `ci.yml` and `codeql.yml` |
 | `.github/rulesets/` | Rulesets to import: `main` protected, squash only, `check`, `pr-title` and `gitleaks` required; release tags locked |
 | `docs/decisions/` | Decision records, starting with the workflow's |
@@ -57,6 +58,7 @@ Every project gets:
 | `scripts/new-worktree.sh` | Starts a task: a branch and worktree from the latest `origin/main` |
 | `scripts/cleanup-merged.sh` | After a merge, removes that task's worktree and branch |
 | `.gitignore`, `.gitattributes`, `.editorconfig` | OS, editor and secret files ignored; LF line endings; indent per file type |
+| `SECURITY.md` | Report vulnerabilities privately through GitHub, not in an issue |
 | `LICENSE` | MIT, with the year set when the project is set up |
 
 Each language in [`languages/`](languages/) adds its own config, CI and
