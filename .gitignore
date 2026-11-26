@@ -1,0 +1,27 @@
+# Base ignores for every project. scripts/init-project.sh appends the
+# chosen language's own list below.
+
+# OS and editor files
+.DS_Store
+Thumbs.db
+*.swp
+.idea/
+# .vscode/ is committed for shared settings and recommended extensions;
+# personal overrides stay local.
+.vscode/*.local.json
+
+# Secrets and machine-specific settings. Commit .env.example instead.
+.env
+.env.*
+!.env.example
+*.local
+*.pem
+*.key
+
+# Claude Code personal files
+CLAUDE.local.md
+.claude/settings.local.json
+.claude/worktrees/
+
+# scripts/check.sh logs and scratch files
+.logs/
