@@ -5,6 +5,7 @@
   "description": "{{PROJECT_DESCRIPTION}}",
   "license": "MIT",
   "type": "module",
+  "packageManager": "option:package-manager-field",
   "engines": {
     "node": ">=24"
   },

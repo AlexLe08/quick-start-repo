@@ -1,2 +1,2 @@
-- `npm test`: Vitest with coverage, `src/**/*.test.ts`; fails below the
-  thresholds in `vitest.config.ts` (`npm run test:watch` watches)
+- `{{PM_TEST}}`: Vitest with coverage, `src/**/*.test.ts`; fails below the
+  thresholds in `vitest.config.ts` (`{{PM_RUN}} test:watch` watches)

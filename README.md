@@ -15,11 +15,19 @@ setup script keeps only that one.
    scripts/init-project.sh typescript --description "One paragraph on what it is."
    ```
 
-   The language is `typescript`, `python`, `java` or `csharp`. For
-   TypeScript the script asks which test runner to use (Vitest, Node's
-   built-in runner or Jest), or takes `--test vitest|node|jest`. The
-   project name defaults to the folder's name; pass `--name my-app` to
-   change it.
+   The language is `typescript`, `python`, `java` or `csharp`. Some
+   languages offer a choice of tools; the script asks about each, with
+   the recommended one as the default, or takes them as flags:
+
+   | Language | Choice | Options (default first) |
+   | --- | --- | --- |
+   | `typescript` | `--package-manager` | `npm`, `pnpm`, `bun` |
+   | `typescript` | `--test` | `vitest`, `node`, `jest` |
+   | `python` | `--typecheck` | `mypy`, `pyright`, `ty` |
+   | `java` | `--build` | `maven`, `gradle` |
+
+   The project name defaults to the folder's name; pass `--name my-app`
+   to change it.
 3. Follow the steps it prints: review the diff, install, run
    `scripts/check.sh`, commit and push.
 4. Apply the repository settings and rulesets in
@@ -58,9 +66,9 @@ runs, one line per step) and `scripts/setup-worktree.sh`:
 
 | Language | Toolchain |
 | --- | --- |
-| `typescript` | Node's latest LTS, npm, TypeScript (strict), ESLint (typescript-eslint), Prettier; Vitest, `node:test` or Jest |
-| `python` | Python 3.13, uv, ruff, pytest, pip-audit in CI |
-| `java` | Java 25 (LTS), Maven, JUnit 6, google-java-format (Spotless), JaCoCo |
+| `typescript` | Node's latest LTS; npm, pnpm or Bun; TypeScript (strict), ESLint (typescript-eslint), Prettier; Vitest, `node:test` or Jest |
+| `python` | Python 3.13, uv, ruff, pytest; mypy, pyright or ty; pip-audit in CI |
+| `java` | Java 25 (LTS); Maven or Gradle; JUnit 6, google-java-format (Spotless), JaCoCo |
 | `csharp` | .NET 10 (LTS), xUnit v3, `dotnet format`, analyzers as errors |
 
 Claude Code adds no co-author line to commits or PRs
@@ -84,8 +92,13 @@ it back.
 Work on the template itself follows the same rules: a branch, a PR,
 CI green. The template's own CI (`.github/workflows/template.yml`, which
 the setup script deletes) runs shellcheck on every script and sets up a
-demo project in each language, then runs its `scripts/check.sh`. Projects already created from it don't change; copy an
-improvement into them by hand.
+demo project in each language and with each option, then runs its
+`scripts/check.sh`. Projects already created from it don't change; copy
+an improvement into them by hand.
+
+A new choice of tools is a folder under `languages/<language>/options/`;
+the header of `scripts/init-project.sh` says what goes in it. Add a demo
+for each new option to the `init` matrix in `template.yml`.
 
 ## License
 

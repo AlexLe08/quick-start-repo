@@ -9,4 +9,6 @@
 
 # Lockfiles: no diff noise in reviews, no hand merges.
 package-lock.json -diff linguist-generated
+pnpm-lock.yaml -diff linguist-generated
+bun.lock -diff linguist-generated
 uv.lock -diff linguist-generated
