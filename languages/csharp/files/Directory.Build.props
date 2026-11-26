@@ -1,0 +1,17 @@
+<!-- Settings every project in the solution shares. -->
+<Project>
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <!-- Warnings fail the build, so they get fixed rather than piling up;
+         the recommended analyzer set and the .editorconfig style rules
+         run on every build, not only in the IDE. -->
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <AnalysisLevel>latest-recommended</AnalysisLevel>
+    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+    <!-- packages.lock.json pins every package, direct or not; CI restores
+         with locked mode so a drifted lock fails. -->
+    <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
+  </PropertyGroup>
+</Project>

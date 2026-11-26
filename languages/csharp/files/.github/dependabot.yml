@@ -1,0 +1,31 @@
+# Version updates, once a month, each ecosystem's in one grouped PR.
+# Security updates still arrive as soon as Dependabot alerts are on.
+# Every PR runs CI like any other and waits for the owner to merge.
+version: 2
+updates:
+  - package-ecosystem: nuget
+    directory: /
+    schedule:
+      interval: monthly
+    # A release has to be a week old before a PR proposes it, so a
+    # compromised version is usually caught and pulled first.
+    cooldown:
+      default-days: 7
+    groups:
+      nuget:
+        patterns: ["*"]
+    commit-message:
+      prefix: deps
+
+  # Keeps the SHA-pinned actions current (the SHA and its version comment).
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly
+    cooldown:
+      default-days: 7
+    groups:
+      actions:
+        patterns: ["*"]
+    commit-message:
+      prefix: ci
