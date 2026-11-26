@@ -11,6 +11,7 @@ command runs through `uv run` so it uses the project's `.venv`.
 - `uv run ruff check .` / `uv run ruff format .`: lint (pycodestyle,
   pyflakes, isort, bugbear, pyupgrade, simplify) and format, ruff's
   defaults otherwise
+<!-- option:typecheck -->
 - `uv run pytest`: tests in `tests/`, with coverage; fails below
   `--cov-fail-under` in `pyproject.toml`
 - `scripts/check.sh`: everything CI's `check` job runs except the
@@ -25,7 +26,8 @@ command runs through `uv run` so it uses the project's `.venv`.
 
 - The package lives in `src/{{PACKAGE_NAME}}/` (src layout), so tests import
   the installed package, not loose files.
-- Type hints on every function signature.
+- Type hints on every function signature; the type checker in
+  `scripts/check.sh` holds the rest of the code to them.
 - Coverage's floor sits just under the current number; raise it when
   coverage rises, never lower it to pass.
 - After changing dependencies in `pyproject.toml`, run `uv lock` and

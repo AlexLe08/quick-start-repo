@@ -6,5 +6,5 @@
 ```sh
 uv sync                    # .venv with the dev tools
 uv run {{PROJECT_NAME}}    # runs the program
-scripts/check.sh           # lint, format, tests
+scripts/check.sh           # lint, format, type check, tests
 ```

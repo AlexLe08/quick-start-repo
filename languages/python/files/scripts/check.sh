@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # The checks CI runs (.github/workflows/ci.yml, the `check` job): ruff's
-# lint and formatting, then the tests with coverage.
+# lint and formatting, the type check, then the tests with coverage.
 # Prints one line per step; the full output of each goes to
 # .logs/<step>.log, and a failing step also prints its last 30 lines.
 #
@@ -29,6 +29,7 @@ run() {
 
 run lint uv run ruff check .
 run format uv run ruff format --check .
+run typecheck uv run {{TYPECHECK}}
 run test uv run pytest -q
 
 exit "$failed"

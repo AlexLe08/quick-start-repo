@@ -11,7 +11,7 @@ dependencies = []
 {{PROJECT_NAME}} = "{{PACKAGE_NAME}}.__main__:main"
 
 [dependency-groups]
-dev = ["pytest>=9.2", "pytest-cov>=7", "ruff>=0.17.6"]
+dev = ["pytest>=9.2", "pytest-cov>=7", "ruff>=0.17.6", {{TYPECHECK_DEPENDENCY}}]
 
 [build-system]
 requires = ["uv_build>=0.13.10,<0.14"]

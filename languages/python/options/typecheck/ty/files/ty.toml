@@ -1,0 +1,8 @@
+# ty is in beta: its rules and settings may change between releases, and
+# uv.lock pins the version until Dependabot proposes the next.
+[src]
+include = ["src", "tests"]
+
+[terminal]
+# A warning fails the check, as it does in strict mypy or pyright.
+error-on-warning = true
