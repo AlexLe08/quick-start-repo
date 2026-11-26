@@ -10,9 +10,11 @@ set -euo pipefail
 cd "$(git rev-parse --show-toplevel)"
 
 # Added, copied, modified or renamed: deleted files have nothing to check.
+# Symlinks are skipped: Prettier refuses one named on its command line,
+# and what they point to is checked as its own file.
 files=()
 while IFS= read -r -d '' file; do
-  files+=("$file")
+  [[ -L "$file" ]] || files+=("$file")
 done < <(git diff --cached --name-only --diff-filter=ACMR -z)
 ((${#files[@]})) || exit 0
 
