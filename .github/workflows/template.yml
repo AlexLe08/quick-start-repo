@@ -30,16 +30,24 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
+        # Each option at least once, and each test runner with two
+        # package managers.
         include:
-          - { language: typescript, test: vitest }
-          - { language: typescript, test: node }
-          - { language: typescript, test: jest }
-          - { language: python }
-          - { language: java }
+          - { language: typescript, options: --package-manager npm --test vitest }
+          - { language: typescript, options: --package-manager pnpm --test vitest }
+          - { language: typescript, options: --package-manager npm --test node }
+          - { language: typescript, options: --package-manager bun --test node }
+          - { language: typescript, options: --package-manager pnpm --test jest }
+          - { language: typescript, options: --package-manager bun --test jest }
+          - { language: python, options: --typecheck mypy }
+          - { language: python, options: --typecheck pyright }
+          - { language: python, options: --typecheck ty }
+          - { language: java, options: --build maven }
+          - { language: java, options: --build gradle }
           - { language: csharp }
     env:
       LANGUAGE: ${{ matrix.language }}
-      TEST_RUNNER: ${{ matrix.test }}
+      OPTIONS: ${{ matrix.options }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -73,14 +81,17 @@ jobs:
           cd "$demo"
           rm -rf .git
           git init -q
-          scripts/init-project.sh "$LANGUAGE" ${TEST_RUNNER:+--test "$TEST_RUNNER"} \
-            --description "Demo: a/b, it's 100% fine."
+          # OPTIONS is several words, split on purpose; no terminal, so no
+          # questions.
+          # shellcheck disable=SC2086
+          scripts/init-project.sh "$LANGUAGE" $OPTIONS \
+            --description "Demo: a/b, it's 100% fine." </dev/null
           echo "DEMO=$demo" >>"$GITHUB_ENV"
 
       - name: Nothing of the template is left
         working-directory: ${{ env.DEMO }}
         run: |
-          left="$(grep -rnI --exclude-dir=.git -e '{{[A-Z_]*}}' -e '__PACKAGE_NAME__' -e '__PASCAL_NAME__' . || true)"
+          left="$(grep -rnI --exclude-dir=.git -e '{{[A-Z_]*}}' -e '__PACKAGE_NAME__' -e '__PASCAL_NAME__' -e 'option:[a-z]' . || true)"
           left="$left$(find . -path ./.git -prune -o -name '*__*_NAME__*' -print)"
           for path in languages scripts/init-project.sh .github/workflows/template.yml; do
             [[ ! -e "$path" ]] || left="$left"$'\n'"$path still exists"
@@ -94,9 +105,14 @@ jobs:
         working-directory: ${{ env.DEMO }}
         run: |
           case "$LANGUAGE" in
-            typescript) npm install ;;
+            typescript)
+              # pnpm or Bun at the version package.json names; npm comes
+              # with Node.
+              spec="$(node -p 'require("./package.json").packageManager ?? "npm"')"
+              [[ "$spec" == npm ]] || npm install -g --no-fund "$spec"
+              "${spec%%@*}" install ;;
             python) uv sync ;;
-            java) mvn -B -q dependency:go-offline ;;
+            java) [[ ! -f pom.xml ]] || mvn -B -q dependency:go-offline ;;
             csharp) dotnet restore ;;
           esac
 
