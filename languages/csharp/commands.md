@@ -1,6 +1,7 @@
 ## Commands
 
-.NET 10 (`global.json` pins the SDK band; mise or the official installer).
+.NET 10, the current LTS (`global.json` takes any 10.0 SDK; move to
+.NET 12, the next LTS, when it lands in November 2027).
 One solution, `{{PASCAL_NAME}}.slnx`: the program in `src/{{PASCAL_NAME}}/`,
 its xUnit v3 tests in `tests/{{PASCAL_NAME}}.Tests/`.
 

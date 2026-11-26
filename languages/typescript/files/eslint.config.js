@@ -7,7 +7,7 @@ export default defineConfig([
   tseslint.configs.recommended,
   {
     // A promise nobody awaits or catches becomes an unhandled rejection,
-    // which crashes a Node 24 process. These rules need type information.
+    // which crashes the Node process. These rules need type information.
     files: ["src/**/*.ts"],
     languageOptions: { parserOptions: { projectService: true } },
     rules: {

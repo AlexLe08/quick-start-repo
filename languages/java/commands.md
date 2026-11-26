@@ -1,8 +1,9 @@
 ## Commands
 
-Java 25 (`.java-version`; mise reads it, set to Temurin), built with
-Maven 3.9+ (`pom.xml`). Classes live under the `dev.alexle.{{PACKAGE_NAME}}`
-package.
+Java 25, the current LTS (`.java-version`; mise reads it, set to
+Temurin; move to the next LTS, 29, when it lands in September 2027),
+built with Maven 3.9+ (`pom.xml`). Classes live under the
+`dev.alexle.{{PACKAGE_NAME}}` package.
 
 - `mvn -B verify`: compile with every warning as an error
   (`-Xlint:all -Werror`), run the JUnit 6 tests in `src/test/java/`,

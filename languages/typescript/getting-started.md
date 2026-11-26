@@ -1,6 +1,7 @@
 ## Getting started
 
-Node 24 (`.nvmrc`), then:
+Node's latest LTS (`.nvmrc`; `nvm install` or `mise install` picks it
+up), then:
 
 ```sh
 npm ci

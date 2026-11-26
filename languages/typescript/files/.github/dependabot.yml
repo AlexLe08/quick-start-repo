@@ -15,7 +15,8 @@ updates:
     cooldown:
       default-days: 7
     ignore:
-      # @types/node follows the Node major in .nvmrc; raise both together.
+      # @types/node follows the current LTS's major (.nvmrc says lts/*);
+      # raise it by hand when a new LTS lands.
       - dependency-name: "@types/node"
         update-types: ["version-update:semver-major"]
       # typescript-eslint supports TypeScript below 6.1 (its peer range);
