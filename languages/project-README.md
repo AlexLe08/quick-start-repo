@@ -17,6 +17,7 @@ alike.
 - [docs/roadmap.md](docs/roadmap.md): where the project stands and what's next
 - [docs/decisions/](docs/decisions/): why things are the way they are
 - [docs/github-setup.md](docs/github-setup.md): repository settings and rulesets
+- [docs/releasing.md](docs/releasing.md): versions and releases, if it publishes any
 
 ## License
 

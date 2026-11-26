@@ -35,6 +35,8 @@ the workflow, indexed in its `README.md`.
   goes in the feature's own PR, which also moves or removes its Next up
   or Later item.
 - `docs/decisions/`: decision records, as above.
+- `docs/releasing.md`: versions, the changelog and tags, for when the
+  project starts releasing.
 - Comments say why, not what: the reason, the constraint, the incident
   behind a choice. No comments that explain the language, and no
   commented-out code.

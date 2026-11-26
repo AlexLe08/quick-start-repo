@@ -23,8 +23,9 @@ Under **Pull Requests**:
 
 - [`.github/rulesets/main.json`](../.github/rulesets/main.json): `main`
   can't be deleted or force-pushed, changes go through a PR merged by
-  squash, and the `check` job must pass on a branch that is up to date
-  with `main`. No approval is required, since one person owns the
+  squash, and the `check` (`ci.yml`), `pr-title` and `gitleaks`
+  (`security.yml`) jobs must pass on a branch that is up to date with
+  `main`. No approval is required, since one person owns the
   repository; the owner merges by convention.
 - [`.github/rulesets/tags.json`](../.github/rulesets/tags.json): a pushed
   `v*` tag can't be moved or deleted. Only needed for a project that
@@ -40,6 +41,11 @@ the ruleset, or every PR waits for a check that never comes.
   repositories).
 - **Private vulnerability reporting**: on, for a public project that
   others use.
+- **Code scanning**: nothing to set up; `.github/workflows/codeql.yml`
+  uploads its results. It needs a public repository (or paid Advanced
+  Security), so delete that workflow in a private one. zizmor in
+  `security.yml` prints its findings in the job log instead, so it works
+  either way.
 
 ## Actions (Settings → Actions → General)
 
