@@ -1,3 +1,2 @@
-# pnpm writes its own settings here, such as which dependencies may run
-# install scripts.
+# pnpm adds to its settings file in its own style.
 pnpm-workspace.yaml

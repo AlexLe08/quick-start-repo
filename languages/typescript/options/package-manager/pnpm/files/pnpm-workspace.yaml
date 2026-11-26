@@ -1,0 +1,9 @@
+# pnpm's settings for this project.
+
+# Which dependencies may run install scripts: true lets one run, false
+# skips it. pnpm fails an install on any dependency with a script that
+# isn't listed; `pnpm approve-builds` adds it here.
+allowBuilds:
+  # Ships prebuilt binaries for each platform; its script only builds
+  # from source when none fits.
+  "@parcel/watcher": false

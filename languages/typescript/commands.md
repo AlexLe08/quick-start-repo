@@ -10,6 +10,7 @@ record.
 
 - Install: `{{PM_CI}}` (`{{PM_ADD}} <pkg>` to add one; never install
   globally with `sudo`)
+<!-- option:package-manager -->
 - `{{PM_RUN}} start` / `{{PM_RUN}} dev`: run `src/index.ts` (once / on every save).
   Node strips the types itself, so nothing is built first.
 - `{{PM_RUN}} lint`: ESLint with typescript-eslint's recommended rules, plus

@@ -228,6 +228,8 @@ for dir in ${chosen[@]+"${chosen[@]}"}; do
     export "QSR_$key=${line#*=}"
   done <"$dir/vars"
 done
+# Perl, not shell, expands $ENV and $1 here.
+# shellcheck disable=SC2016
 fill='s/\{\{([A-Z][A-Z_]*)\}\}/exists $ENV{"QSR_$1"} ? $ENV{"QSR_$1"} : $&/ge'
 grep -rlI --exclude-dir=.git --exclude-dir=languages -e '{{[A-Z_]*}}' . |
   while IFS= read -r file; do
