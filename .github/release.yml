@@ -1,0 +1,18 @@
+# Sorts the release notes GitHub writes for a release (Generate release
+# notes, or `gh release create --generate-notes`) by each PR's label.
+# The `label` job in workflows/pr-title.yml sets the label from the PR
+# title, so nobody labels by hand (docs/releasing.md).
+changelog:
+  exclude:
+    # Dependency bumps; their PRs are still on GitHub.
+    authors:
+      - dependabot[bot]
+  categories:
+    - title: Breaking changes
+      labels: [breaking]
+    - title: Features
+      labels: [enhancement]
+    - title: Fixes
+      labels: [bug]
+    - title: Other changes
+      labels: ["*"]

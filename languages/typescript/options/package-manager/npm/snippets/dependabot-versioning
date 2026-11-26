@@ -1,0 +1,3 @@
+    # Ranges stay open upward: a minor or patch moves only the lockfile,
+    # a major raises the range.
+    versioning-strategy: increase-if-necessary

@@ -1,0 +1,35 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  # A required check in .github/rulesets/main.json: renaming this job
+  # means updating the ruleset. scripts/check.sh runs the same steps.
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      # ./mvnw downloads the Maven version in
+      # .mvn/wrapper/maven-wrapper.properties.
+      - uses: actions/setup-java@d1374f8ac74474200d16ef8ecee22c7ae7a51880 # v6.3.0
+        with:
+          distribution: temurin
+          java-version-file: .java-version
+          cache: maven
+
+      - name: Format
+        run: ./mvnw -B spotless:check
+
+      # Compile (warnings are errors), tests, coverage minimum.
+      - name: Verify
+        run: ./mvnw -B verify

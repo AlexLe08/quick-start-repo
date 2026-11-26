@@ -1,0 +1,1 @@
+./mvnw -B verify     # downloads Maven and the dependencies, builds and tests

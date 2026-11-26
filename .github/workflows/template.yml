@@ -1,0 +1,186 @@
+# The template's own CI: lints its shell scripts, then sets up a project in
+# each language with scripts/init-project.sh and runs that project's
+# checks, the way a new repository would. scripts/init-project.sh deletes
+# this file, so projects made from the template never run it.
+name: Template
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  scripts:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      # shellcheck comes with the runner image. Scripts with {{PLACEHOLDERS}}
+      # aren't shell until the setup script fills them in, so each demo
+      # project below checks its own.
+      - name: shellcheck
+        run: |
+          mapfile -t scripts < <(find languages -name '*.sh' -exec grep -L '{{[A-Z_]*}}' {} +)
+          shellcheck scripts/*.sh .githooks/pre-commit "${scripts[@]}"
+
+  init:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        # Each option at least once, and each test runner with two
+        # package managers.
+        include:
+          - { language: typescript, options: --package-manager npm --test vitest }
+          - { language: typescript, options: --package-manager pnpm --test vitest }
+          - { language: typescript, options: --package-manager npm --test node }
+          - { language: typescript, options: --package-manager bun --test node }
+          - { language: typescript, options: --package-manager pnpm --test jest }
+          - { language: typescript, options: --package-manager bun --test jest }
+          - { language: python, options: --typecheck mypy }
+          - { language: python, options: --typecheck pyright }
+          - { language: python, options: --typecheck ty }
+          - { language: java, options: --build maven }
+          - { language: java, options: --build gradle }
+          - { language: csharp }
+    env:
+      LANGUAGE: ${{ matrix.language }}
+      OPTIONS: ${{ matrix.options }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - if: matrix.language == 'typescript'
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: languages/typescript/files/.nvmrc
+      - if: matrix.language == 'python'
+        uses: astral-sh/setup-uv@1db35dd8eee11c5894872e0b383ae6c406cf738d # v10.4.0
+        with:
+          version: "0.13.10"
+          enable-cache: false
+      - if: matrix.language == 'java'
+        uses: actions/setup-java@d1374f8ac74474200d16ef8ecee22c7ae7a51880 # v6.3.0
+        with:
+          distribution: temurin
+          java-version-file: languages/java/files/.java-version
+      - if: matrix.language == 'csharp'
+        uses: actions/setup-dotnet@0f4a354dd5547a28c70b7853dbd95d5b67886e73 # v6.1.0
+        with:
+          global-json-file: languages/csharp/files/global.json
+
+      # A fresh repository named demo-app, so the derived names are
+      # demo_app and DemoApp.
+      - name: Set up a demo project
+        run: |
+          demo="$RUNNER_TEMP/demo-app"
+          cp -R . "$demo"
+          cd "$demo"
+          rm -rf .git
+          git init -q
+          # OPTIONS is several words, split on purpose; no terminal, so no
+          # questions.
+          # shellcheck disable=SC2086
+          scripts/init-project.sh "$LANGUAGE" $OPTIONS \
+            --description "Demo: a/b, it's 100% fine." </dev/null
+          echo "DEMO=$demo" >>"$GITHUB_ENV"
+
+      - name: Nothing of the template is left
+        working-directory: ${{ env.DEMO }}
+        run: |
+          left="$(grep -rnI --exclude-dir=.git -e '{{[A-Z_]*}}' -e '__PACKAGE_NAME__' -e '__PASCAL_NAME__' -e 'option:[a-z]' . || true)"
+          left="$left$(find . -path ./.git -prune -o -name '*__*_NAME__*' -print)"
+          for path in languages scripts/init-project.sh .github/workflows/template.yml; do
+            [[ ! -e "$path" ]] || left="$left"$'\n'"$path still exists"
+          done
+          if [[ -n "$left" ]]; then
+            echo "$left"
+            exit 1
+          fi
+
+      # pnpm or Bun at the version package.json names, as the project's own
+      # ci.yml installs them; npm comes with Node.
+      - name: Package manager
+        id: pm
+        if: matrix.language == 'typescript'
+        working-directory: ${{ env.DEMO }}
+        run: |
+          spec="$(node -p 'require("./package.json").packageManager ?? "npm@"')"
+          echo "name=${spec%%@*}" >>"$GITHUB_OUTPUT"
+          echo "version=${spec#*@}" >>"$GITHUB_OUTPUT"
+      - if: steps.pm.outputs.name == 'pnpm'
+        uses: pnpm/action-setup@73e46992e05b19abd31f2f3c20e0e7370d762115 # v6.1.1
+        with:
+          version: ${{ steps.pm.outputs.version }}
+      - if: steps.pm.outputs.name == 'bun'
+        uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
+        with:
+          bun-version: ${{ steps.pm.outputs.version }}
+
+      - name: Install
+        working-directory: ${{ env.DEMO }}
+        env:
+          PM: ${{ steps.pm.outputs.name }}
+        run: |
+          case "$LANGUAGE" in
+            typescript) "$PM" install ;;
+            python) uv sync ;;
+            java) [[ ! -f pom.xml ]] || ./mvnw -B -q dependency:go-offline ;;
+            csharp) dotnet restore ;;
+          esac
+
+      - name: shellcheck
+        working-directory: ${{ env.DEMO }}
+        run: shellcheck scripts/*.sh .githooks/pre-commit
+
+      # With the hook on, the first commit passes and a badly formatted
+      # file stops the next one.
+      - name: Pre-commit hook
+        working-directory: ${{ env.DEMO }}
+        run: |
+          git config core.hooksPath .githooks
+          git config user.name demo
+          git config user.email demo@example.invalid
+          git add -A
+          git commit -q -m "chore: set up demo-app"
+          case "$LANGUAGE" in
+            typescript) bad=src/bad.ts; printf 'export const x=1\n' >"$bad" ;;
+            python) bad=src/demo_app/bad.py; printf 'x=1\n' >"$bad" ;;
+            java) bad=src/main/java/dev/alexle/demo_app/Bad.java
+              printf 'package dev.alexle.demo_app;\nclass Bad{}\n' >"$bad" ;;
+            csharp) bad=src/DemoApp/Bad.cs; printf 'namespace DemoApp;\nclass Bad{ }\n' >"$bad" ;;
+          esac
+          git add "$bad"
+          if git commit -q -m "chore: add a badly formatted file"; then
+            echo "the hook let $bad through"
+            exit 1
+          fi
+          git rm -q --cached "$bad"
+          rm "$bad"
+
+      - name: scripts/check.sh
+        working-directory: ${{ env.DEMO }}
+        run: scripts/check.sh
+
+  # The one required check for the template's own PRs: the ruleset names
+  # `check`, and a skipped job would count as passed, hence always().
+  check:
+    if: always()
+    needs: [scripts, init]
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: All template jobs passed
+        env:
+          SCRIPTS: ${{ needs.scripts.result }}
+          INIT: ${{ needs.init.result }}
+        run: |
+          echo "scripts: $SCRIPTS, init: $INIT"
+          [[ "$SCRIPTS" == success && "$INIT" == success ]]

@@ -1,0 +1,19 @@
+{
+  "[javascript][typescript][json][jsonc][markdown][yaml]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit"
+  },
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "files.exclude": {
+    "**/.logs": true,
+    "**/coverage": true
+  },
+  "search.exclude": {
+    "**/.env": true,
+    "dist/**": true,
+    "{{PM_LOCKFILE}}": true
+  }
+}

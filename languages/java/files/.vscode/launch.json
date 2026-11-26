@@ -1,0 +1,11 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Run App",
+      "type": "java",
+      "request": "launch",
+      "mainClass": "dev.alexle.{{PACKAGE_NAME}}.App"
+    }
+  ]
+}

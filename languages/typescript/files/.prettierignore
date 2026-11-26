@@ -1,0 +1,9 @@
+# Prettier runs with its defaults (.prettierrc.json is empty, so editors
+# set to `prettier.requireConfig` still format this project). Generated
+# and scratch files stay as they are.
+dist/
+coverage/
+.logs/
+.claude/worktrees/
+{{PM_LOCKFILE}}
+# option:package-manager-files

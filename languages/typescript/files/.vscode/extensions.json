@@ -1,0 +1,9 @@
+{
+  "recommendations": [
+    "dbaeumer.vscode-eslint",
+    "esbenp.prettier-vscode",
+    "option:test-extension",
+    "editorconfig.editorconfig",
+    "github.vscode-github-actions"
+  ]
+}

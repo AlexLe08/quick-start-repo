@@ -1,0 +1,15 @@
+{
+  "dotnet.defaultSolution": "{{PASCAL_NAME}}.slnx",
+  "[csharp]": {
+    "editor.defaultFormatter": "ms-dotnettools.csharp",
+    "editor.formatOnSave": true
+  },
+  "files.exclude": {
+    "**/bin": true,
+    "**/obj": true
+  },
+  "search.exclude": {
+    "**/.env": true,
+    "**/packages.lock.json": true
+  }
+}

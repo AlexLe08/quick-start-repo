@@ -1,0 +1,14 @@
+# Normalise line endings to LF in the repository, whatever the OS that
+# commits them, so diffs and shell scripts behave the same everywhere.
+* text=auto eol=lf
+
+# Windows-only scripts keep CRLF.
+*.bat text eol=crlf
+*.cmd text eol=crlf
+*.ps1 text eol=crlf
+
+# Lockfiles: no diff noise in reviews, no hand merges.
+package-lock.json -diff linguist-generated
+pnpm-lock.yaml -diff linguist-generated
+bun.lock -diff linguist-generated
+uv.lock -diff linguist-generated

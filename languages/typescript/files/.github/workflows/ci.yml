@@ -1,0 +1,41 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  # A required check in .github/rulesets/main.json: renaming this job
+  # means updating the ruleset. scripts/check.sh runs the same steps.
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      # option:package-manager-setup
+
+      - name: Lint
+        run: {{PM_RUN}} lint
+
+      - name: Format
+        run: {{PM_RUN}} format:check
+
+      - name: Unused files, exports and dependencies
+        run: {{PM_RUN}} knip
+
+      - name: Type-check
+        run: {{PM_RUN}} typecheck
+
+      # Fails below the test runner's coverage thresholds.
+      - name: Tests and coverage
+        run: {{PM_TEST}}
+
+      - name: Build
+        run: {{PM_RUN}} build

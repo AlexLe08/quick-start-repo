@@ -1,0 +1,10 @@
+{
+  "recommendations": [
+    "ms-python.python",
+    "charliermarsh.ruff",
+    "option:typecheck-extension",
+    "tamasfe.even-better-toml",
+    "editorconfig.editorconfig",
+    "github.vscode-github-actions"
+  ]
+}

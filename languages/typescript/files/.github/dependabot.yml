@@ -1,0 +1,41 @@
+# Version updates, once a month, each ecosystem's in one grouped PR.
+# Security updates still arrive as soon as Dependabot alerts are on.
+# Every PR runs CI like any other and waits for the owner to merge.
+version: 2
+updates:
+  - package-ecosystem: {{PM_ECOSYSTEM}}
+    directory: /
+    schedule:
+      interval: monthly
+    # option:dependabot-versioning
+    # A release has to be a week old before a PR proposes it, so a
+    # compromised version is usually caught and pulled first.
+    cooldown:
+      default-days: 7
+    ignore:
+      # @types/node follows the current LTS's major (.nvmrc says lts/*);
+      # raise it by hand when a new LTS lands.
+      - dependency-name: "@types/node"
+        update-types: ["version-update:semver-major"]
+      # typescript-eslint supports TypeScript below 6.1 (its peer range);
+      # widen this once it allows newer.
+      - dependency-name: typescript
+        versions: [">=6.1.0"]
+    groups:
+      {{PM_ECOSYSTEM}}:
+        patterns: ["*"]
+    commit-message:
+      prefix: deps
+
+  # Keeps the SHA-pinned actions current (the SHA and its version comment).
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly
+    cooldown:
+      default-days: 7
+    groups:
+      actions:
+        patterns: ["*"]
+    commit-message:
+      prefix: ci
