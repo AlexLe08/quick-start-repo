@@ -17,6 +17,7 @@
     "lint": "eslint",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
+    "knip": "knip",
     "test": "NODE_OPTIONS=--experimental-vm-modules jest --coverage",
     "test:watch": "NODE_OPTIONS=--experimental-vm-modules jest --watch"
   },
@@ -25,6 +26,7 @@
     "@types/node": "^26.6.11",
     "eslint": "^10.15.0",
     "jest": "^30.5.2",
+    "knip": "^6.48.0",
     "prettier": "^3.10.1",
     "ts-jest": "^29.4.15",
     "typescript": "~6.0.3",

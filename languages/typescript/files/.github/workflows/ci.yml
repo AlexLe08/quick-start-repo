@@ -27,6 +27,9 @@ jobs:
       - name: Format
         run: {{PM_RUN}} format:check
 
+      - name: Unused files, exports and dependencies
+        run: {{PM_RUN}} knip
+
       - name: Type-check
         run: {{PM_RUN}} typecheck
 

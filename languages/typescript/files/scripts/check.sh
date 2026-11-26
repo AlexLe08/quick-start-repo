@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # The checks CI runs (.github/workflows/ci.yml, the `check` job): lint,
-# formatting, type-check, tests with coverage, then the build.
+# formatting, unused code, type-check, tests with coverage, then the
+# build.
 # Prints one line per step; the full output of each goes to
 # .logs/<step>.log, and a failing step also prints its last 30 lines.
 #
@@ -29,6 +30,7 @@ run() {
 
 run lint {{PM_RUN}} lint
 run format {{PM_RUN}} format:check
+run unused {{PM_RUN}} knip
 run typecheck {{PM_RUN}} typecheck
 run test {{PM_TEST}}
 run build {{PM_RUN}} build

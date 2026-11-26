@@ -16,6 +16,10 @@ record.
 - `{{PM_RUN}} lint`: ESLint with typescript-eslint's recommended rules, plus
   `no-floating-promises` and `no-misused-promises` (type-aware) on `src/`
 - `{{PM_RUN}} format` / `{{PM_RUN}} format:check`: Prettier, with its defaults
+- `{{PM_RUN}} knip`: knip, for unused files, exports and dependencies. It
+  finds entry points from `package.json` and the tools' configs; tell it
+  about anything else in `knip.json`, rather than exporting or depending
+  on something just to quiet it.
 - `{{PM_RUN}} typecheck`: `tsc --noEmit`, strict, with
   `noUncheckedIndexedAccess`
 <!-- option:test -->

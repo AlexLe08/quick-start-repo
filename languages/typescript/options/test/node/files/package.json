@@ -17,12 +17,14 @@
     "lint": "eslint",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
+    "knip": "knip",
     "test": "node --test --experimental-test-coverage --test-coverage-include='src/**/*.ts' --test-coverage-exclude='src/**/*.test.ts' --test-coverage-exclude=src/index.ts --test-coverage-lines=80 --test-coverage-functions=80 --test-coverage-branches=80 'src/**/*.test.ts'",
     "test:watch": "node --test --watch 'src/**/*.test.ts'"
   },
   "devDependencies": {
     "@types/node": "^26.6.11",
     "eslint": "^10.15.0",
+    "knip": "^6.48.0",
     "prettier": "^3.10.1",
     "typescript": "~6.0.3",
     "typescript-eslint": "^8.74.0"
