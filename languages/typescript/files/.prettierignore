@@ -6,3 +6,4 @@ coverage/
 .logs/
 .claude/worktrees/
 {{PM_LOCKFILE}}
+# option:package-manager-files

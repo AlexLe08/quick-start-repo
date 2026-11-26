@@ -20,9 +20,13 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
-      # shellcheck comes with the runner image.
+      # shellcheck comes with the runner image. Scripts with {{PLACEHOLDERS}}
+      # aren't shell until the setup script fills them in, so each demo
+      # project below checks its own.
       - name: shellcheck
-        run: shellcheck scripts/*.sh languages/*/files/scripts/*.sh
+        run: |
+          mapfile -t scripts < <(find languages -name '*.sh' -exec grep -L '{{[A-Z_]*}}' {} +)
+          shellcheck scripts/*.sh "${scripts[@]}"
 
   init:
     runs-on: ubuntu-latest
@@ -109,12 +113,18 @@ jobs:
               # pnpm or Bun at the version package.json names; npm comes
               # with Node.
               spec="$(node -p 'require("./package.json").packageManager ?? "npm"')"
-              [[ "$spec" == npm ]] || npm install -g --no-fund "$spec"
+              # The version is pinned in package.json; this installs the
+              # tool, not the project's dependencies.
+              [[ "$spec" == npm ]] || npm install -g --no-fund "$spec" # zizmor: ignore[adhoc-packages]
               "${spec%%@*}" install ;;
             python) uv sync ;;
             java) [[ ! -f pom.xml ]] || mvn -B -q dependency:go-offline ;;
             csharp) dotnet restore ;;
           esac
+
+      - name: shellcheck
+        working-directory: ${{ env.DEMO }}
+        run: shellcheck scripts/*.sh
 
       - name: scripts/check.sh
         working-directory: ${{ env.DEMO }}
