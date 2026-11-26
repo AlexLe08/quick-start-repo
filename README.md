@@ -32,7 +32,8 @@ later: the README the setup script writes lists them.
    The project name defaults to the folder's name; pass `--name my-app`
    to change it.
 3. Follow the steps it prints: review the diff, install, run
-   `scripts/check.sh`, commit and push.
+   `scripts/check.sh`, commit and push. That push goes straight to
+   `main`, the only one that should; after step 4, every change is a PR.
 4. Apply the repository settings and rulesets in
    [docs/github-setup.md](docs/github-setup.md); a template can't carry
    them.

@@ -259,5 +259,7 @@ $(printf '%s\n' "$next_steps" | sed 's/^/       /')
        scripts/check.sh
   3. Fill in the TODOs in README.md and AGENTS.md ("What this is").
   4. Commit and push:  git add -A && git commit -m "chore: set up $name from quick-start-repo" && git push
+     This is the one push straight to main; the rulesets in step 5 stop
+     any other, and every change after it goes through a PR.
   5. Repository settings and rulesets: docs/github-setup.md
 EOF

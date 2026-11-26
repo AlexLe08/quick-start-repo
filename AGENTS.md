@@ -58,7 +58,8 @@ the workflow, indexed in its `README.md`.
 ## Workflow
 
 - `main` is protected by a ruleset: branch off `main`, open a PR, CI
-  green, the owner merges. Never push to `main`. Keep PRs small, one
+  green, the owner merges. Never push to `main` (the one exception was the
+  setup commit, pushed before the rulesets existed). Keep PRs small, one
   change each; a large change is a series of them, each passing the
   checks. When one PR needs another that hasn't merged, base it on that
   branch and say so.
@@ -96,4 +97,7 @@ the workflow, indexed in its `README.md`.
   merges, and pushes release tags.
 - Stage files by name and check `git diff --staged` before committing,
   never `git commit -a`: an editor or tool may have changed tracked files.
-- Fill in the PR template, including what you couldn't verify.
+- Open the PR with `gh pr create --title "<type>: …" --body-file <file>`,
+  the body following `.github/pull_request_template.md` (plain
+  `gh pr create` asks for both), or on GitHub. Fill in the template,
+  including what you couldn't verify.
