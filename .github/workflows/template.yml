@@ -1,0 +1,113 @@
+# The template's own CI: lints its shell scripts, then sets up a project in
+# each language with scripts/init-project.sh and runs that project's
+# checks, the way a new repository would. scripts/init-project.sh deletes
+# this file, so projects made from the template never run it.
+name: Template
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  scripts:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      # shellcheck comes with the runner image.
+      - name: shellcheck
+        run: shellcheck scripts/*.sh languages/*/files/scripts/*.sh
+
+  init:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        language: [typescript, python, java, csharp]
+    env:
+      LANGUAGE: ${{ matrix.language }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - if: matrix.language == 'typescript'
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: languages/typescript/files/.nvmrc
+      - if: matrix.language == 'python'
+        uses: astral-sh/setup-uv@1db35dd8eee11c5894872e0b383ae6c406cf738d # v10.4.0
+        with:
+          version: "0.13.10"
+          enable-cache: false
+      - if: matrix.language == 'java'
+        uses: actions/setup-java@d1374f8ac74474200d16ef8ecee22c7ae7a51880 # v6.3.0
+        with:
+          distribution: temurin
+          java-version-file: languages/java/files/.java-version
+      - if: matrix.language == 'csharp'
+        uses: actions/setup-dotnet@0f4a354dd5547a28c70b7853dbd95d5b67886e73 # v6.1.0
+        with:
+          global-json-file: languages/csharp/files/global.json
+
+      # A fresh repository named demo-app, so the derived names are
+      # demo_app and DemoApp.
+      - name: Set up a demo project
+        run: |
+          demo="$RUNNER_TEMP/demo-app"
+          cp -R . "$demo"
+          cd "$demo"
+          rm -rf .git
+          git init -q
+          scripts/init-project.sh "$LANGUAGE" --description "Demo: a/b, it's 100% fine."
+          echo "DEMO=$demo" >>"$GITHUB_ENV"
+
+      - name: Nothing of the template is left
+        working-directory: ${{ env.DEMO }}
+        run: |
+          left="$(grep -rnI --exclude-dir=.git -e '{{[A-Z_]*}}' -e '__PACKAGE_NAME__' -e '__PASCAL_NAME__' . || true)"
+          left="$left$(find . -path ./.git -prune -o -name '*__*_NAME__*' -print)"
+          for path in languages scripts/init-project.sh .github/workflows/template.yml; do
+            [[ ! -e "$path" ]] || left="$left"$'\n'"$path still exists"
+          done
+          if [[ -n "$left" ]]; then
+            echo "$left"
+            exit 1
+          fi
+
+      - name: Install
+        working-directory: ${{ env.DEMO }}
+        run: |
+          case "$LANGUAGE" in
+            typescript) npm install ;;
+            python) uv sync ;;
+            java) mvn -B -q dependency:go-offline ;;
+            csharp) dotnet restore ;;
+          esac
+
+      - name: scripts/check.sh
+        working-directory: ${{ env.DEMO }}
+        run: scripts/check.sh
+
+  # The one required check for the template's own PRs: the ruleset names
+  # `check`, and a skipped job would count as passed, hence always().
+  check:
+    if: always()
+    needs: [scripts, init]
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: All template jobs passed
+        env:
+          SCRIPTS: ${{ needs.scripts.result }}
+          INIT: ${{ needs.init.result }}
+        run: |
+          echo "scripts: $SCRIPTS, init: $INIT"
+          [[ "$SCRIPTS" == success && "$INIT" == success ]]
