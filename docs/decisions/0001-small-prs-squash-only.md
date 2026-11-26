@@ -19,7 +19,9 @@ title and body become the one commit. Titles and branch names follow
 Conventional Commits (`feat: …` on `feat/…`). The repository allows squash
 merges only and deletes head branches on merge; a ruleset protects `main`.
 
-**Why:** TODO(Alex)
+**Why:** 
+
+Ideally treat main history as a changelog so that there is not a pile of unnecessary small commits in the histroy at a glance. Keep it readable and simple at main, other branches can afford to be more descriptive in their commit history.
 
 ## Consequences
 
