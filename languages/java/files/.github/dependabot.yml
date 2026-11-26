@@ -3,7 +3,7 @@
 # Every PR runs CI like any other and waits for the owner to merge.
 version: 2
 updates:
-  - package-ecosystem: maven
+  - package-ecosystem: {{BUILD}}
     directory: /
     schedule:
       interval: monthly
@@ -12,7 +12,7 @@ updates:
     cooldown:
       default-days: 7
     groups:
-      maven:
+      {{BUILD}}:
         patterns: ["*"]
     commit-message:
       prefix: deps

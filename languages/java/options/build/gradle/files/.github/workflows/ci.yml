@@ -1,0 +1,36 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  # A required check in .github/rulesets/main.json: renaming this job
+  # means updating the ruleset. scripts/check.sh runs the same steps.
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-java@d1374f8ac74474200d16ef8ecee22c7ae7a51880 # v6.3.0
+        with:
+          distribution: temurin
+          java-version-file: .java-version
+
+      # Checks gradle-wrapper.jar against Gradle's published checksums, and
+      # caches Gradle's downloads between runs.
+      - uses: gradle/actions/setup-gradle@8da46b539cd8fe6ab27ca75128919a18d757604c # v6.4.1
+
+      - name: Format
+        run: ./gradlew spotlessCheck
+
+      # Compile (warnings are errors), tests, coverage minimum.
+      - name: Build
+        run: ./gradlew build

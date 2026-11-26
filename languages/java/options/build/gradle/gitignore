@@ -1,0 +1,6 @@
+# Gradle
+.gradle/
+build/
+.kotlin/
+# The wrapper runs Gradle; it is committed, unlike other jars.
+!gradle/wrapper/gradle-wrapper.jar
