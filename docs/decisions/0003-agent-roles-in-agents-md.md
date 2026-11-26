@@ -24,7 +24,9 @@ with the main session orchestrating. Each role is written once, in
 per role that points to it. Skills live in `.agents/skills/`, each linked
 from `.claude/skills/`. There are no per-language agents.
 
-**Why:** TODO(Alex)
+**Why:** 
+
+The agent workflow should be part of this quick start setup as a base line. Just about any project will need these three agents in some shape.
 
 ## Consequences
 
