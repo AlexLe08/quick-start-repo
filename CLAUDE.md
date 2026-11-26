@@ -8,4 +8,11 @@ Code:
 
 - Shared permissions are in `.claude/settings.json`; personal ones go in
   `.claude/settings.local.json` (gitignored).
-- Subagents live in `.claude/agents/`, skills in `.claude/skills/`.
+- Subagents live in `.claude/agents/`, one short file per role in
+  `AGENTS.md` ("Agent workflow"), pointing to it.
+- Skills live in `.agents/skills/`, shared with other tools. Claude Code
+  looks in `.claude/skills/`, so each skill is linked from there:
+
+  ```sh
+  ln -s ../../.agents/skills/<name> .claude/skills/<name>
+  ```
