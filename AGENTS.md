@@ -73,11 +73,11 @@ the workflow, indexed in its `README.md`.
 ## Workflow
 
 - `main` is protected by a ruleset: branch off `main`, open a PR, CI
-  green, the owner merges. Never push to `main` (the one exception was the
-  setup commit, pushed before the rulesets existed). Keep PRs small, one
-  change each; a large change is a series of them, each passing the
-  checks. When one PR needs another that hasn't merged, base it on that
-  branch and say so.
+  green, then the merge, by whoever Merging (under Agent workflow) names.
+  Never push to `main` (the one exception was the setup commit, pushed
+  before the rulesets existed). Keep PRs small, one change each; a large
+  change is a series of them, each passing the checks. When one PR needs
+  another that hasn't merged, base it on that branch and say so.
 - Commits and PR titles follow
   [Conventional Commits](https://www.conventionalcommits.org/):
   `feat`, `fix`, `docs`, `test`, `ci`, `refactor`, `chore`, `deps`,
@@ -108,8 +108,8 @@ the workflow, indexed in its `README.md`.
   dependencies; list what you noticed instead.
 - Commit in small logical steps. Agents may commit and push their task
   branch (never `--force`). The reviewer (see Agent workflow) reviews the
-  branch before the PR is opened; only the owner approves, merges, and
-  pushes release tags.
+  branch before the PR is opened. Only the owner approves PRs and pushes
+  release tags; who merges is set under Merging.
 - Stage files by name and check `git diff --staged` before committing,
   never `git commit -a`: an editor or tool may have changed tracked files.
 - Open the PR with `gh pr create --title "<type>: …" --body-file <file>`,
@@ -128,8 +128,9 @@ one short file per role, not a copy of the rules.
   `docs/roadmap.md`, asks the planner for a plan when the change is more
   than a small fix, creates each task's worktree
   (`scripts/new-worktree.sh <branch>`), gives each task to an
-  implementer, has the reviewer check the branch, and opens the PR. Only
-  the main session talks to the owner; agents report to it.
+  implementer, has the reviewer check the branch, opens the PR, and
+  merges it when Merging (below) says agents merge. Only the main
+  session talks to the owner; agents report to it.
 - An agent starts without the conversation: its prompt carries the task,
   the plan step, the worktree path and the branch.
 - One implementer per worktree and branch. Tasks that don't depend on
@@ -204,3 +205,28 @@ service.
 4. Report each finding as `path:line`, severity (blocker, should-fix,
    nit), the rule or reason, and a suggested fix. Then what was checked,
    what wasn't, and a verdict: pass or changes needed.
+
+### Merging
+
+Merges: owner
+
+The owner sets this line to `owner` or `agents`, per project; agents
+never change it.
+
+- `owner`: the main session stops at the open PR and reports it; the
+  owner reviews and merges.
+- `agents`: the main session merges its own PR once the reviewer's
+  verdict is pass, every required check is green on the PR's head, the
+  PR has no conflicts, and no comment on it asks to wait. It merges that
+  exact head, `gh pr merge <number> --squash --match-head-commit <sha>`,
+  then runs `scripts/cleanup-merged.sh --apply` and reports what merged.
+  If GitHub refuses because the branch is behind `main`, it merges
+  `origin/main` into the branch, pushes, and waits for the checks again.
+  A PR waits for the owner instead when it adds a runtime dependency,
+  publishes a release, or changes `.github/`, `.githooks/`,
+  `.claude/settings.json` or this section.
+
+Switching to `agents` also means deleting `"Bash(gh pr merge *)"` from
+the `deny` list in `.claude/settings.json`, which blocks merging while
+the line says `owner`. Approving PRs, pushing release tags and approving
+deploys stay with the owner either way.

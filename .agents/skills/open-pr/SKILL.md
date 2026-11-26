@@ -5,8 +5,8 @@ description: Opens the pull request for a finished task branch, with the title a
 
 # Open a pull request
 
-Opens the PR for one task branch. Never merge, approve or review it: that
-is the owner's.
+Opens the PR for one task branch. Never approve or review it; whether
+the main session then merges it is set under Merging in `AGENTS.md`.
 
 1. Check the branch is ready: everything committed (`git status` is
    clean), `scripts/check.sh` passes, and the reviewer's verdict was
@@ -23,4 +23,5 @@ is the owner's.
    any test removed with the code it tested.
 5. Open it: `gh pr create --title "<type>: …" --body-file .logs/pr-body.md`.
 6. Report the PR's link and what it waits on: CI, then the owner's
-   review and merge.
+   review and merge, or, with `Merges: agents`, the merge as `AGENTS.md`
+   describes it.
