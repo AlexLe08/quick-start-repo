@@ -11,3 +11,8 @@ uv run {{PROJECT_NAME}}
 # lint, format, type check, tests: what CI runs
 scripts/check.sh
 ```
+
+Settings come from environment variables, each listed in `.env.example`.
+`cp .env.example .env` and fill in your own values; `.env` is gitignored.
+`uv run --env-file .env {{PROJECT_NAME}}` loads it, and so does VS Code's
+Python extension when it runs or debugs the code.

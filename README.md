@@ -63,6 +63,7 @@ Every project gets:
 | `scripts/new-worktree.sh` | Starts a task: a branch and worktree from the latest `origin/main` |
 | `scripts/cleanup-merged.sh` | After a merge, removes that task's worktree and branch |
 | `.typos.toml` | Words the spell checker should accept |
+| `.env.example` | Every environment variable the program reads, with safe example values; copied to a gitignored `.env` for real ones |
 | `.gitignore`, `.gitattributes`, `.editorconfig` | OS, editor and secret files ignored; LF line endings; indent per file type |
 | `SECURITY.md` | Report vulnerabilities privately through GitHub, not in an issue |
 | `LICENSE` | MIT, with the year set when the project is set up |
