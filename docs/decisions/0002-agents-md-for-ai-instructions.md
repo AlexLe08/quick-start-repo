@@ -15,7 +15,8 @@ reads `CLAUDE.md`, which can import another file with `@AGENTS.md`.
 The project's instructions for any AI agent live in `AGENTS.md`.
 `CLAUDE.md` imports it and holds only what is specific to Claude Code.
 
-**Why:** TODO(Alex)
+**Why:**
+Preparing for future development efforts involving multiple agent uses from different providers.
 
 ## Consequences
 
