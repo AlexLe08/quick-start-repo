@@ -49,7 +49,8 @@ Every project gets:
 | `.claude/agents/reviewer.md` | A read-only subagent that reviews a branch before its PR |
 | `.github/pull_request_template.md` | What changed, screenshots, checklist, what wasn't verified |
 | `.github/ISSUE_TEMPLATE/` | Issue forms for bug reports and feature requests, which label the issue `bug` or `enhancement` |
-| `.github/workflows/` | `pr-title.yml` (Conventional Commits title), `security.yml` (gitleaks secret scan, zizmor workflow audit); each language adds `ci.yml` and `codeql.yml` |
+| `.github/workflows/` | `pr-title.yml` (Conventional Commits title, and a label from it), `security.yml` (gitleaks secret scan, zizmor workflow audit); each language adds `ci.yml` and `codeql.yml` |
+| `.github/release.yml` | Sorts generated release notes into breaking changes, features, fixes and the rest, by the label `pr-title.yml` sets |
 | `.github/rulesets/` | Rulesets to import: `main` protected, squash only, `check`, `pr-title` and `gitleaks` required; release tags locked |
 | `docs/decisions/` | Decision records, starting with the workflow's |
 | `docs/roadmap.md` | Now, Next up, Later, Done |

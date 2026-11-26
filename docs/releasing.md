@@ -57,9 +57,19 @@ changes (CI, refactors, tests) get no line.
    git tag vX.Y.Z && git push origin vX.Y.Z
    ```
 
-4. Optionally, a GitHub Release from the tag (Releases → Draft a new
-   release, or `gh release create vX.Y.Z --notes-from-tag`), with the
-   changelog's section as its notes.
+4. Optionally, a GitHub Release from the tag:
+
+   ```sh
+   gh release create vX.Y.Z --generate-notes
+   ```
+
+   or Releases → Draft a new release → Generate release notes. GitHub
+   lists the PRs merged since the last tag, sorted by
+   [`.github/release.yml`](../.github/release.yml) into breaking changes,
+   features, fixes and the rest, using the label `pr-title.yml` sets from
+   each title (`feat` → enhancement, `fix` → bug, a `!` → breaking).
+   Dependabot's PRs are left out. Paste the changelog's section above the
+   list if users read the release page.
 
 Tags are plain `v` plus the version (`v1.4.0`, `v2.0.0-beta.1`). The tags
 ruleset ([`.github/rulesets/tags.json`](../.github/rulesets/tags.json), see
