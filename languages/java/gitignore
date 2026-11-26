@@ -1,0 +1,6 @@
+# Java / Maven
+target/
+*.class
+*.jar
+*.log
+hs_err_pid*
