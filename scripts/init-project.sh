@@ -5,9 +5,12 @@
 #
 # 1. copies languages/<language>/files/ over the repository root (its
 #    config, CI workflow, Dependabot file, starter code and the
-#    language's scripts/check.sh and scripts/setup-worktree.sh);
+#    language's scripts/check.sh and scripts/setup-worktree.sh), then the
+#    chosen test runner's files where the language offers a choice
+#    (languages/<language>/options/test/<runner>/);
 # 2. appends languages/<language>/gitignore to .gitignore;
-# 3. puts languages/<language>/commands.md into AGENTS.md, and
+# 3. puts languages/<language>/commands.md (and the test runner's
+#    commands.md) into AGENTS.md, and
 #    languages/<language>/getting-started.md into the new README;
 # 4. fills in the placeholders: {{PROJECT_NAME}}, {{PROJECT_DESCRIPTION}},
 #    {{YEAR}}, and the per-language names derived from the project name
@@ -24,7 +27,10 @@
 # Written for the bash 3.2 that macOS ships, and BSD as well as GNU tools.
 #
 # Usage: scripts/init-project.sh <typescript|python|java|csharp>
-#          [--name <project-name>] [--description "<one paragraph>"]
+#          [--test <runner>] [--name <project-name>]
+#          [--description "<one paragraph>"]
+#   --test picks TypeScript's test runner: vitest, node or jest. Without
+#   it the script asks; when it can't ask (no terminal), it stops.
 #   --name defaults to the repository folder's name; lowercase letters,
 #   digits and hyphens, starting with a letter. --description is one line
 #   without " \ < > or &.
@@ -41,11 +47,13 @@ cd "$root"
 language=""
 name=""
 description=""
+test_runner=""
 while (($#)); do
   case "$1" in
     -h | --help) usage ;;
     --name) name="${2:?--name needs a value}"; shift 2 ;;
     --description) description="${2:?--description needs a value}"; shift 2 ;;
+    --test) test_runner="${2:?--test needs a value}"; shift 2 ;;
     -*) echo "unknown option: $1" >&2; usage 2 ;;
     *)
       [[ -z "$language" ]] || { echo "one language only" >&2; usage 2; }
@@ -69,6 +77,34 @@ lang_dir="$root/languages/$language"
   exit 1
 }
 
+# The test runner, for a language that offers a choice.
+test_dir="$lang_dir/options/test"
+if [[ ! -d "$test_dir" ]]; then
+  [[ -z "$test_runner" ]] || { echo "--test is only for typescript" >&2; exit 2; }
+else
+  runners=""
+  for dir in "$test_dir"/*/; do
+    runner="$(basename "$dir")"
+    runners="${runners:+$runners, }$runner"
+  done
+  if [[ -z "$test_runner" ]]; then
+    [[ -t 0 ]] || {
+      echo "choose a test runner with --test: $runners" >&2
+      exit 2
+    }
+    echo "Which test runner?"
+    for dir in "$test_dir"/*/; do
+      printf '  %-7s %s\n' "$(basename "$dir")" "$(cat "$dir/label")"
+    done
+    read -r -p "test runner [vitest]: " test_runner
+    test_runner="${test_runner:-vitest}"
+  fi
+  [[ -d "$test_dir/$test_runner" && "$test_runner" != */* ]] || {
+    echo "unknown test runner: $test_runner (choose from: $runners)" >&2
+    exit 2
+  }
+fi
+
 name="${name:-$(basename "$root")}"
 if ! [[ "$name" =~ ^[a-z][a-z0-9-]*$ ]]; then
   echo "project name '$name' must be lowercase letters, digits and hyphens," >&2
@@ -87,10 +123,13 @@ year="$(date +%Y)"
 package_name="${name//-/_}"
 pascal_name="$(printf '%s' "$name" | awk -F- '{ for (i = 1; i <= NF; i++) printf "%s%s", toupper(substr($i, 1, 1)), substr($i, 2) }')"
 
-echo "setting up $name ($language)"
+echo "setting up $name ($language${test_runner:+, $test_runner})"
 
 # 1. The language's files over the root. tar keeps dotfiles and modes.
 (cd "$lang_dir/files" && tar -cf - .) | tar -xf -
+if [[ -n "$test_runner" ]]; then
+  (cd "$test_dir/$test_runner/files" && tar -cf - .) | tar -xf -
+fi
 
 # 2. Its ignores after the base ones.
 if [[ -f "$lang_dir/gitignore" ]]; then
@@ -104,6 +143,9 @@ insert_file() { # insert_file <target> <marker> <file>
   MARKER="$2" INSERT="$(cat "$3")" perl -0pi -e 's/\Q$ENV{MARKER}\E/$ENV{INSERT}/' "$1"
 }
 insert_file AGENTS.md "<!-- language:commands -->" "$lang_dir/commands.md"
+if [[ -n "$test_runner" ]]; then
+  insert_file AGENTS.md "<!-- option:test -->" "$test_dir/$test_runner/commands.md"
+fi
 mv languages/project-README.md README.md
 insert_file README.md "<!-- language:getting-started -->" "$lang_dir/getting-started.md"
 

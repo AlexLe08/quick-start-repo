@@ -20,7 +20,7 @@
     "test:watch": "vitest"
   },
   "devDependencies": {
-    "@types/node": "^24.19.4",
+    "@types/node": "^26.6.11",
     "@vitest/coverage-v8": "^5.1.2",
     "eslint": "^10.15.0",
     "prettier": "^3.10.1",

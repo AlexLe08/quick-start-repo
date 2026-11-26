@@ -1,7 +1,7 @@
 ## Commands
 
-TypeScript on Node 24 (`.nvmrc`; mise or nvm read it), ES modules only,
-npm. Use the package manager the lockfile belongs to: this project has
+TypeScript on Node's latest LTS (`.nvmrc` says `lts/*`, which nvm,
+fnm, mise and CI all read), ES modules only, npm. Use the package manager the lockfile belongs to: this project has
 `package-lock.json`, so npm. Switching to pnpm (or another) means
 replacing the lockfile, `npm ci` in CI and `scripts/`, and the
 Dependabot ecosystem, in one PR with a decision record.
@@ -14,8 +14,7 @@ Dependabot ecosystem, in one PR with a decision record.
 - `npm run format` / `npm run format:check`: Prettier, with its defaults
 - `npm run typecheck`: `tsc --noEmit`, strict, with
   `noUncheckedIndexedAccess`
-- `npm test`: Vitest with coverage, `src/**/*.test.ts`; fails below the
-  thresholds in `vitest.config.ts` (`npm run test:watch` watches)
+<!-- option:test -->
 - `npm run build`: `tsc -p tsconfig.build.json` to `dist/`, without tests
 - `scripts/check.sh`: everything CI's `check` job runs, one line per step.
   Done means it passes.
@@ -33,6 +32,9 @@ Dependabot ecosystem, in one PR with a decision record.
 - Tests sit beside the code as `src/*.test.ts`. Coverage thresholds sit
   just under the current numbers; raise them when coverage rises, never
   lower them to pass.
+- `@types/node` follows the LTS's major. When a new LTS lands (each
+  October), raise it by hand; Dependabot skips its majors, which would
+  otherwise jump to the newest Node rather than the LTS.
 - TypeScript stays on `~6.0` until typescript-eslint supports newer
   (Dependabot ignores 6.1 and up until then).
 - Dependency ranges are open upward. When something breaks after a fresh

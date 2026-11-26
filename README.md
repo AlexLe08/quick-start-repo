@@ -15,8 +15,11 @@ setup script keeps only that one.
    scripts/init-project.sh typescript --description "One paragraph on what it is."
    ```
 
-   The language is `typescript`, `python`, `java` or `csharp`. The project
-   name defaults to the folder's name; pass `--name my-app` to change it.
+   The language is `typescript`, `python`, `java` or `csharp`. For
+   TypeScript the script asks which test runner to use (Vitest, Node's
+   built-in runner or Jest), or takes `--test vitest|node|jest`. The
+   project name defaults to the folder's name; pass `--name my-app` to
+   change it.
 3. Follow the steps it prints: review the diff, install, run
    `scripts/check.sh`, commit and push.
 4. Apply the repository settings and rulesets in
@@ -55,10 +58,10 @@ runs, one line per step) and `scripts/setup-worktree.sh`:
 
 | Language | Toolchain |
 | --- | --- |
-| `typescript` | Node 24, npm, TypeScript (strict), ESLint (typescript-eslint), Prettier, Vitest |
+| `typescript` | Node's latest LTS, npm, TypeScript (strict), ESLint (typescript-eslint), Prettier; Vitest, `node:test` or Jest |
 | `python` | Python 3.13, uv, ruff, pytest, pip-audit in CI |
-| `java` | Java 25, Maven, JUnit 6, google-java-format (Spotless), JaCoCo |
-| `csharp` | .NET 10, xUnit v3, `dotnet format`, analyzers as errors |
+| `java` | Java 25 (LTS), Maven, JUnit 6, google-java-format (Spotless), JaCoCo |
+| `csharp` | .NET 10 (LTS), xUnit v3, `dotnet format`, analyzers as errors |
 
 Claude Code adds no co-author line to commits or PRs
 (`attribution` in `.claude/settings.json`); delete that setting to bring

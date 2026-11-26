@@ -30,9 +30,16 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        language: [typescript, python, java, csharp]
+        include:
+          - { language: typescript, test: vitest }
+          - { language: typescript, test: node }
+          - { language: typescript, test: jest }
+          - { language: python }
+          - { language: java }
+          - { language: csharp }
     env:
       LANGUAGE: ${{ matrix.language }}
+      TEST_RUNNER: ${{ matrix.test }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -66,7 +73,8 @@ jobs:
           cd "$demo"
           rm -rf .git
           git init -q
-          scripts/init-project.sh "$LANGUAGE" --description "Demo: a/b, it's 100% fine."
+          scripts/init-project.sh "$LANGUAGE" ${TEST_RUNNER:+--test "$TEST_RUNNER"} \
+            --description "Demo: a/b, it's 100% fine."
           echo "DEMO=$demo" >>"$GITHUB_ENV"
 
       - name: Nothing of the template is left
