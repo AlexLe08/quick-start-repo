@@ -105,18 +105,32 @@ jobs:
             exit 1
           fi
 
-      - name: Install
+      # pnpm or Bun at the version package.json names, as the project's own
+      # ci.yml installs them; npm comes with Node.
+      - name: Package manager
+        id: pm
+        if: matrix.language == 'typescript'
         working-directory: ${{ env.DEMO }}
         run: |
+          spec="$(node -p 'require("./package.json").packageManager ?? "npm@"')"
+          echo "name=${spec%%@*}" >>"$GITHUB_OUTPUT"
+          echo "version=${spec#*@}" >>"$GITHUB_OUTPUT"
+      - if: steps.pm.outputs.name == 'pnpm'
+        uses: pnpm/action-setup@73e46992e05b19abd31f2f3c20e0e7370d762115 # v6.1.1
+        with:
+          version: ${{ steps.pm.outputs.version }}
+      - if: steps.pm.outputs.name == 'bun'
+        uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
+        with:
+          bun-version: ${{ steps.pm.outputs.version }}
+
+      - name: Install
+        working-directory: ${{ env.DEMO }}
+        env:
+          PM: ${{ steps.pm.outputs.name }}
+        run: |
           case "$LANGUAGE" in
-            typescript)
-              # pnpm or Bun at the version package.json names; npm comes
-              # with Node.
-              spec="$(node -p 'require("./package.json").packageManager ?? "npm"')"
-              # The version is pinned in package.json; this installs the
-              # tool, not the project's dependencies.
-              [[ "$spec" == npm ]] || npm install -g --no-fund "$spec" # zizmor: ignore[adhoc-packages]
-              "${spec%%@*}" install ;;
+            typescript) "$PM" install ;;
             python) uv sync ;;
             java) [[ ! -f pom.xml ]] || mvn -B -q dependency:go-offline ;;
             csharp) dotnet restore ;;
